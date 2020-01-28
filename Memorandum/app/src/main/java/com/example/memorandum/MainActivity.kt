@@ -14,7 +14,7 @@ class MainActivity : AppCompatActivity() {
 
     var noteList:MutableList<Note> = ArrayList()
 
-    var masterSqlite = MasterSqlite(this,1)
+    var masterSqlite = MasterSqlite(this,5)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,8 +74,10 @@ class MainActivity : AppCompatActivity() {
         {
             do {
                 var words = cursor.getString(cursor.getColumnIndex("words"))
+                var time = cursor.getString(cursor.getColumnIndex("time"))
                 Log.d("tag","book author is"+ words)
                 var note1 = Note(words)
+                note1.time =time
                 noteList.add(note1)
             }while (cursor.moveToNext())
         }

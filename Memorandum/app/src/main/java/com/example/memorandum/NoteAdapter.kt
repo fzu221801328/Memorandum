@@ -15,10 +15,12 @@ class NoteAdapter(private val context: Context, private var mnoteList:MutableLis
     class ViewHolder constructor(view: View) : RecyclerView.ViewHolder(view) {
 
         var noteName: TextView
+        var noteTime: TextView
 
         init {
 
             this.noteName = view.findViewById(R.id.itemText)
+            this.noteTime = view.findViewById(R.id.itemTime)
         }
 
     }
@@ -30,6 +32,7 @@ class NoteAdapter(private val context: Context, private var mnoteList:MutableLis
         val note = mnoteList[position]
 
         holder.noteName.setText(note.words)
+        holder.noteTime.setText(note.time)
     }
 
 

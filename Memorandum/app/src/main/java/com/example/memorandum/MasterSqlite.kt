@@ -10,15 +10,21 @@ class MasterSqlite(var context: Context,var version:Int) {
     init {
         Log.d("tag","会走到MasterSqlite")
     }
-
-    var dbHelper = MyDatabaseHelper(context,"TestDatabase.db",null,3)
+//更新表时版本要+++
+    var dbHelper = MyDatabaseHelper(context,"Database.db",null,6)
 
     fun addData(note: Note)
     {
         var db = dbHelper.readableDatabase
         var values = ContentValues()
         values.put("words",note.words)
-        db.insert("Note",null,values)
+        Log.d("tag","成功put words")
+        values.put("time",DateUtil.nowDateTime)//为什么加上这句话直接就存不进去了
+        Log.d("tag","成功put time")
+        //第一个参数是表名
+        db.insert("NoteTime",null,values)
+        Log.d("tag","成功insert")
+
     }
 
 
@@ -38,7 +44,7 @@ class MasterSqlite(var context: Context,var version:Int) {
     fun findAllData():Cursor
     {
         var db = dbHelper.writableDatabase
-        var cursor = db.query("Note",null,null,null,null,null,null)
+        var cursor = db.query("NoteTime",null,null,null,null,null,null)
         return cursor
     }
 

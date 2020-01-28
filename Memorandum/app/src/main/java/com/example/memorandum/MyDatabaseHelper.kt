@@ -17,9 +17,11 @@ class MyDatabaseHelper(
         Log.d("tag","会走到MyDatabaseHelper")
     }
 
-    private var CREATE_NOTE = "create table Note ("+
+
+//建立一个新的表
+    private var CREATE_NOTE = "create table NoteTime ("+
             "_id integer primary key autoincrement,"+
-            "words text)"
+            "words text,"+"time text)"
 
    /* private  var CREATE_CATEGORY = "create table Category("+
             "id integer primary key autoincrement,"+
@@ -35,8 +37,8 @@ class MyDatabaseHelper(
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
-        db?.execSQL("drop table if exists Book")
-        db?.execSQL("drop table if exists Category")
+
+        db?.execSQL("drop table if exists NoteTime")
         onCreate(db)
     }
 }
