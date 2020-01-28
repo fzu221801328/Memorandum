@@ -14,9 +14,16 @@ class MainActivity : AppCompatActivity() {
 
     var noteList:MutableList<Note> = ArrayList()
 
+    var masterSqlite = MasterSqlite(this,1)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+
+
+
+
         initNotes()//:FruitAdapter
         var layoutManager= LinearLayoutManager(this)
         recycle.layoutManager=layoutManager
@@ -49,14 +56,32 @@ class MainActivity : AppCompatActivity() {
                 if (resultCode == RESULT_OK) {
                     var returnedData = data?.getStringExtra("data_return")
                     Log.d("tag",returnedData.toString())
+                    //这一句要改成存入数据库啦
+                    var temp = Note(returnedData.toString())
+                    masterSqlite.addData(temp)
                 }
             }
         }
 
     }
 
+    //这里改成从数据库中读取
     fun initNotes(){
-        var i=0
+
+        var cursor = masterSqlite.findAllData()
+
+        if(cursor.moveToFirst())
+        {
+            do {
+                var words = cursor.getString(cursor.getColumnIndex("words"))
+                Log.d("tag","book author is"+ words)
+                var note1 = Note(words)
+                noteList.add(note1)
+            }while (cursor.moveToNext())
+        }
+        cursor.close()
+
+       /* var i=0
         var j=2
         while (i<=j) {
             var note1 = Note("lalal拉开了看到")
@@ -65,6 +90,6 @@ class MainActivity : AppCompatActivity() {
             noteList.add(note2)
 
             i++
-        }
+        }*/
     }
 }
