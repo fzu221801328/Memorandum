@@ -5,6 +5,8 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.AdapterView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_main.*
@@ -45,6 +47,7 @@ class MainActivity : AppCompatActivity() {
             //startActivity(intent)
 
 
+
         }
     }
 
@@ -75,9 +78,11 @@ class MainActivity : AppCompatActivity() {
             do {
                 var words = cursor.getString(cursor.getColumnIndex("words"))
                 var time = cursor.getString(cursor.getColumnIndex("time"))
+                var id = cursor.getString(cursor.getColumnIndex("_id"))
                 Log.d("tag","book author is"+ words)
                 var note1 = Note(words)
                 note1.time =time
+                note1.id = id.toInt()
                 noteList.add(note1)
             }while (cursor.moveToNext())
         }
@@ -94,4 +99,6 @@ class MainActivity : AppCompatActivity() {
             i++
         }*/
     }
+
+
 }
