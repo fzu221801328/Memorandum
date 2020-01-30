@@ -44,16 +44,14 @@ class NoteAdapter(private val context: Context, private var mnoteList:MutableLis
             val context = v?.context as Activity
             //Toast.makeText(context,noteName.text.toString(),Toast.LENGTH_SHORT).show()
 
-
             var intent = Intent(context,NewActivity::class.java)
             //Toast.makeText(context,note.id.toString(),Toast.LENGTH_SHORT).show()
 
-            //context.startActivityForResult(intent,1)
             intent.putExtra("id",note.id)
             intent.putExtra("time",note.time)
             intent.putExtra("words",note.words)
             context.startActivityForResult(intent,2)
-            //context.startActivity(intent)
+
             //传数据给下一个活动
            // intent.putExtra("id",note.)
 

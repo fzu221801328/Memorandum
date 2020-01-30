@@ -13,6 +13,16 @@ class MasterSqlite(var context: Context,var version:Int) {
 //更新表时版本要+++
     var dbHelper = MyDatabaseHelper(context,"Database.db",null,6)
 
+    fun open()
+    {
+        dbHelper.writableDatabase
+    }
+
+    fun close()
+    {
+        dbHelper.close()
+    }
+
     fun addData(note: Note)
     {
         var db = dbHelper.readableDatabase
@@ -26,6 +36,12 @@ class MasterSqlite(var context: Context,var version:Int) {
         Log.d("tag","成功insert")
 
     }
+
+    /*根据id来更新笔记*/
+    //fun updateData(note:Note)
+    //{
+        //先通过id查到这条笔记
+    //}
 
 
   /*  fun deleteData(note: Note)
@@ -41,11 +57,30 @@ class MasterSqlite(var context: Context,var version:Int) {
         db.delete("Book","author=?", arrayOf("pan zi"))
     }
 */
-    fun findAllData():Cursor
+    fun findAllData():MutableList<Note>
     {
         var db = dbHelper.writableDatabase
         var cursor = db.query("NoteTime",null,null,null,null,null,null)
-        return cursor
+
+        var noteList:MutableList<Note> = ArrayList()
+       // var cursor = masterSqlite.findAllData()
+
+        if(cursor.moveToFirst())
+        {
+            do {
+                var words = cursor.getString(cursor.getColumnIndex("words"))
+                var time = cursor.getString(cursor.getColumnIndex("time"))
+                var id = cursor.getString(cursor.getColumnIndex("_id"))
+                Log.d("tag","book author is"+ words)
+                var note1 = Note(words)
+                note1.time =time
+                note1.id = id.toInt()
+                noteList.add(note1)
+            }while (cursor.moveToNext())
+        }
+        cursor.close()
+        return noteList
+       // return cursor
     }
 
     }

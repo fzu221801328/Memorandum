@@ -22,17 +22,13 @@ class NewActivity: AppCompatActivity() {
         editNote.setText(words)
         editTime.setText(time)
 
-
-        /*var intent = Intent()
-        intent.putExtra("data_return",editNote.text.toString())
-        setResult(Activity.RESULT_OK,intent)//返回了这个intent*/
-        //finish()不能写在这
+        //要通过intent传过来的mode来选择，是新建还是修改什么的
     }
 
     override fun onBackPressed() {
         var intent = Intent()
         intent.putExtra("data_return",editNote.text.toString())
         setResult(RESULT_OK,intent)//返回了这个intent
-        finish()
+        finish()//不能在oncreate里写
     }
 }

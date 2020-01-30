@@ -62,43 +62,30 @@ class MainActivity : AppCompatActivity() {
                     //这一句要改成存入数据库啦
                     var temp = Note(returnedData.toString())
                     masterSqlite.addData(temp)
+                    refreshRecyclerView()
                 }
             }
         }
 
     }
 
+    fun refreshRecyclerView()
+    {
+        masterSqlite.open()
+        if(noteList.size > 0) noteList.clear()
+        noteList.addAll(masterSqlite.findAllData())
+        masterSqlite.close()
+        recycle.adapter?.notifyDataSetChanged()
+    }
+
     //这里改成从数据库中读取
     fun initNotes(){
 
-        var cursor = masterSqlite.findAllData()
+        var noteList: MutableList<Note> = masterSqlite.findAllData()
+        this.noteList = noteList
 
-        if(cursor.moveToFirst())
-        {
-            do {
-                var words = cursor.getString(cursor.getColumnIndex("words"))
-                var time = cursor.getString(cursor.getColumnIndex("time"))
-                var id = cursor.getString(cursor.getColumnIndex("_id"))
-                Log.d("tag","book author is"+ words)
-                var note1 = Note(words)
-                note1.time =time
-                note1.id = id.toInt()
-                noteList.add(note1)
-            }while (cursor.moveToNext())
-        }
-        cursor.close()
 
-       /* var i=0
-        var j=2
-        while (i<=j) {
-            var note1 = Note("lalal拉开了看到")
-            noteList.add(note1)
-            var note2 = Note("哦大家记得发plllllllllllllllllll发即可打开的艰苦打看到")
-            noteList.add(note2)
 
-            i++
-        }*/
     }
-
 
 }
