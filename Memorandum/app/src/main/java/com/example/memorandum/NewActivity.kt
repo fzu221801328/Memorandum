@@ -3,15 +3,20 @@ package com.example.memorandum
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.note.*
+import kotlinx.android.synthetic.main.note.mainToolbar
 import kotlinx.android.synthetic.main.note_item.*
 
 class NewActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.note)
+
+        setSupportActionBar(mainToolbar)
 
         //接受来自上一个活动的数据
         var intent = intent
@@ -22,6 +27,8 @@ class NewActivity: AppCompatActivity() {
 
         editNote.setText(oldWords)
         editTime.setText(oldTime)
+
+
 
 
     }
@@ -55,5 +62,10 @@ class NewActivity: AppCompatActivity() {
         }
 
 
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.edit_menu,menu)
+        return super.onCreateOptionsMenu(menu)
     }
 }
