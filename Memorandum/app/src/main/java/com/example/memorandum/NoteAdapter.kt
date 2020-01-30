@@ -3,6 +3,7 @@ package com.example.memorandum
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -47,14 +48,15 @@ class NoteAdapter(private val context: Context, private var mnoteList:MutableLis
             var intent = Intent(context,NewActivity::class.java)
             //Toast.makeText(context,note.id.toString(),Toast.LENGTH_SHORT).show()
 
-            intent.putExtra("id",note.id)
-            intent.putExtra("time",note.time)
+            //这边跳去修改,传数据给下一个活动
+            intent.putExtra("_id",note.id)
+            Log.d("tag","note.id = "+ note.id)
             intent.putExtra("words",note.words)
+            Log.d("tag","note.words = "+ note.words)
+            intent.putExtra("time",note.time)
+            intent.putExtra("mode",2)//2是修改
+
             context.startActivityForResult(intent,2)
-
-            //传数据给下一个活动
-           // intent.putExtra("id",note.)
-
 
         }
 

@@ -16,19 +16,44 @@ class NewActivity: AppCompatActivity() {
         //接受来自上一个活动的数据
         var intent = intent
         //var id =intent.getIntExtra("id",0)
-        var time = intent.getStringExtra("time")
-        var words = intent.getStringExtra("words")
+        //显示修改之前的这些
+        var oldTime = intent.getStringExtra("time")
+        var oldWords = intent.getStringExtra("words")
 
-        editNote.setText(words)
-        editTime.setText(time)
+        editNote.setText(oldWords)
+        editTime.setText(oldTime)
 
-        //要通过intent传过来的mode来选择，是新建还是修改什么的
+
     }
 
     override fun onBackPressed() {
-        var intent = Intent()
-        intent.putExtra("data_return",editNote.text.toString())
-        setResult(RESULT_OK,intent)//返回了这个intent
-        finish()//不能在oncreate里写
+
+
+
+        //要通过intent传过来的mode来选择，是新建还是修改什么的
+        var mode =intent.getIntExtra("mode",-1)
+        //-1应该是出错了不用干什么
+        if(mode == 1)//要修改笔记，传新的值回去了
+        {
+            var intent2 = Intent()
+            intent2.putExtra("data_return",editNote.text.toString())
+            setResult(RESULT_OK,intent2)//返回了这个intent
+            finish()//不能在oncreate里写
+        }
+        else if(mode == 2)
+        {
+            var intent2 = Intent()
+
+            var id =intent.getIntExtra("_id",0)
+
+            intent2.putExtra("_id",id)
+            intent2.putExtra("time",editTime.text.toString())
+            intent2.putExtra("words",editNote.text.toString())
+
+            setResult(RESULT_OK,intent2)//返回了这个intent
+            finish()
+        }
+
+
     }
 }

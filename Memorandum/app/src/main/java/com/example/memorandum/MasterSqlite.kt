@@ -38,21 +38,23 @@ class MasterSqlite(var context: Context,var version:Int) {
     }
 
     /*根据id来更新笔记*/
-    //fun updateData(note:Note)
-    //{
-        //先通过id查到这条笔记
-    //}
-
-
-  /*  fun deleteData(note: Note)
+    fun updateData(note:Note)
     {
+        //先通过id查到这条笔记
         var db = dbHelper.readableDatabase
         var values = ContentValues()
-        values.put("author","maya")
-        db.update("Book",values,"author = ?", arrayOf("tun"))
+
+        values.put("words",note.words)
+        values.put("time",DateUtil.nowDateTime)
+
+        db.update("NoteTime",values,"_id = ?", arrayOf(note.id.toString()))
+        Log.d("tag","更新了笔记")
     }
 
-    deleteeee.setOnClickListener {
+
+
+
+   /* deleteeee.setOnClickListener {
         var db = dbHelper.writableDatabase
         db.delete("Book","author=?", arrayOf("pan zi"))
     }

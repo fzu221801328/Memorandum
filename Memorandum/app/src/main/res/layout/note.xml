@@ -26,22 +26,22 @@
         />
 
 
-    <EditText
-        android:id="@+id/editNote"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/saveNote"
-        android:textSize="20dp"
-        />
+
 
     <TextView
         android:id="@+id/editTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="20dp"
-        android:layout_above="@id/editNote"
+        android:layout_below="@id/saveNote"
         />
 
-
+    <EditText
+        android:id="@+id/editNote"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/editTime"
+        android:textSize="20dp"
+        />
 
 </RelativeLayout>

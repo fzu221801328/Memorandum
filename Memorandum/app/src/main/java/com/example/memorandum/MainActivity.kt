@@ -43,10 +43,10 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this,"hahah",Toast.LENGTH_SHORT).show()
             var intent = Intent()
             intent.setClass(this,NewActivity::class.java)
-            startActivityForResult(intent,1)
-            //startActivity(intent)
 
-
+            intent.putExtra("time",DateUtil.nowDateTime)
+            intent.putExtra("mode",1)//1是新增
+            startActivityForResult(intent,1)//跳过去是新增
 
         }
     }
@@ -56,12 +56,28 @@ class MainActivity : AppCompatActivity() {
         when(requestCode)
         {
             1 -> {
+                Log.d("tag","requestCode = 1")
                 if (resultCode == RESULT_OK) {
                     var returnedData = data?.getStringExtra("data_return")
-                    Log.d("tag",returnedData.toString())
+                    //Log.d("tag",returnedData.toString())
                     //这一句要改成存入数据库啦
                     var temp = Note(returnedData.toString())
                     masterSqlite.addData(temp)
+                    refreshRecyclerView()
+                }
+            }
+            2 ->{//修改
+                if (resultCode == RESULT_OK) {
+                    Log.d("tag","requestCode = 2")
+
+                    var id = data?.getIntExtra("_id",0)
+                    var words = data?.getStringExtra("words")
+                    Log.d("tag","id = "+ id)
+                    Log.d("tag","words = "+ words)
+                    var temp = Note(words.toString())
+                    temp.id = id!!
+
+                    masterSqlite.updateData(temp)
                     refreshRecyclerView()
                 }
             }
@@ -69,6 +85,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    /*更改笔记后更新笔记列表*/
     fun refreshRecyclerView()
     {
         masterSqlite.open()
