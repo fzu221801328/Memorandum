@@ -6,5 +6,5 @@ class Note(var words:String) {
     var id:Int = 0
     var title:String = ""
 
-    var mode:Int = 1//操作的模式1为新增，2为修改
+    var mode:Int = 1//操作的模式1为新增，2为修改，3为删除
 }

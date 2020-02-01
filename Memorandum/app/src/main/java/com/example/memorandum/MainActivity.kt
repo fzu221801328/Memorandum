@@ -10,6 +10,8 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.memorandum.R.drawable
+import com.example.memorandum.R.drawable.ic_dehaze_black_24dp
 import kotlinx.android.synthetic.main.activity_main.*
 import java.nio.ShortBuffer
 
@@ -23,11 +25,12 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        setSupportActionBar(mainToolbar)
+        setSupportActionBar(mainToolbar)//替换
+        //设置左边那个图标
+        mainToolbar.setNavigationIcon(R.drawable.ic_dehaze_black_24dp)
 
 
-
-        initNotes()//:FruitAdapter
+        initNotes()
         var layoutManager= LinearLayoutManager(this)
         recycle.layoutManager=layoutManager
 
@@ -35,8 +38,6 @@ class MainActivity : AppCompatActivity() {
         var adapter= NoteAdapter(this,
             noteList
         )
-        /*var lv:ListView = findViewById(R.id.list_view) as ListView
-        lv.adapter=adapter*/
         recycle.adapter=adapter
 
 
@@ -54,7 +55,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        when(requestCode)
+
+        var returnedMode = data?.getIntExtra("mode",-1)
+        when(returnedMode)
         {
             1 -> {
                 Log.d("tag","requestCode = 1")
@@ -73,14 +76,24 @@ class MainActivity : AppCompatActivity() {
 
                     var id = data?.getIntExtra("_id",0)
                     var words = data?.getStringExtra("words")
-                    Log.d("tag","id = "+ id)
-                    Log.d("tag","words = "+ words)
+                    //Log.d("tag","id = "+ id)
+                    //Log.d("tag","words = "+ words)
                     var temp = Note(words.toString())
                     temp.id = id!!
 
                     masterSqlite.updateData(temp)
                     refreshRecyclerView()
                 }
+            }
+            3 ->if (resultCode == RESULT_OK) {
+                Log.d("tag","requestCode = 3")
+                var id = data?.getIntExtra("_id",0)
+
+                var temp = Note("0")
+                temp.id = id!!
+
+                masterSqlite.deleteNote(temp)
+                refreshRecyclerView()
             }
         }
 

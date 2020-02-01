@@ -29,7 +29,7 @@ class MasterSqlite(var context: Context,var version:Int) {
         var values = ContentValues()
         values.put("words",note.words)
         Log.d("tag","成功put words")
-        values.put("time",DateUtil.nowDateTime)//为什么加上这句话直接就存不进去了
+        values.put("time",DateUtil.nowDateTime)//为什么加上这句话直接就存不进去了//表没更新
         Log.d("tag","成功put time")
         //第一个参数是表名
         db.insert("NoteTime",null,values)
@@ -53,12 +53,15 @@ class MasterSqlite(var context: Context,var version:Int) {
 
 
 
-
-   /* deleteeee.setOnClickListener {
+    fun deleteNote(note:Note)
+    {
+        //先通过id查到这条笔记
         var db = dbHelper.writableDatabase
-        db.delete("Book","author=?", arrayOf("pan zi"))
+
+        db.delete("NoteTime","_id=?", arrayOf(note.id.toString()))
     }
-*/
+
+
     fun findAllData():MutableList<Note>
     {
         var db = dbHelper.writableDatabase
