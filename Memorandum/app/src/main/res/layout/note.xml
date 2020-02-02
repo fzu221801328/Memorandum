@@ -18,28 +18,7 @@
 <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/note_background">
-
-    <Button
-        android:id="@+id/saveNote"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="保存"
-        android:textSize="20dp"
-        android:layout_alignParentRight="true"
-
-        />
-
-    <Button
-        android:id="@+id/cancelNote"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="取消"
-        android:textSize="20dp"
-        android:layout_toLeftOf="@id/saveNote"
-        />
-
-
+    android:background="#D1D7F4">
 
 
     <TextView
@@ -47,7 +26,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="20dp"
-        android:layout_below="@id/saveNote"
         />
 
     <EditText
