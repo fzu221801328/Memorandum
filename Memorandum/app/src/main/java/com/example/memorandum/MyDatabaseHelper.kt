@@ -17,28 +17,32 @@ class MyDatabaseHelper(
         Log.d("tag","会走到MyDatabaseHelper")
     }
 
+    val TABLE_NAME1 = "NoteTime"
+    val TABLE_NAME2 = "DeletedNote"
 
 //建立一个新的表
-    private var CREATE_NOTE = "create table NoteTime ("+
+    private var CREATE_NOTE = "create table ${TABLE_NAME1} ("+
             "_id integer primary key autoincrement,"+
             "words text,"+"time text)"
 
-   /* private  var CREATE_CATEGORY = "create table Category("+
-            "id integer primary key autoincrement,"+
-            "category_name text,"+
-            "category_code integer)"*/
+    //回收站
+    private  var CREATE_DELETED_NOTE = "create table ${TABLE_NAME2}("+
+            "_id integer primary key autoincrement,"+
+            "words text,"+"time text)"
 
     private var mContext=context;
 
     override fun onCreate(db: SQLiteDatabase?) {
         db?.execSQL(CREATE_NOTE)
-      //  db?.execSQL(CREATE_CATEGORY)
+        db?.execSQL(CREATE_DELETED_NOTE)
         Toast.makeText(mContext,"Create succeeded",Toast.LENGTH_SHORT).show()
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
 
-        db?.execSQL("drop table if exists NoteTime")
+        db?.execSQL("drop table if exists ${TABLE_NAME1}")
+        db?.execSQL("drop table if exists ${TABLE_NAME2}")
+
         onCreate(db)
     }
 }

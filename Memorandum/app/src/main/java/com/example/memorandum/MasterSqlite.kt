@@ -7,11 +7,14 @@ import android.util.Log
 
 class MasterSqlite(var context: Context,var version:Int) {
 
+    val TABLE_NAME1 = "NoteTime"
+    val TABLE_NAME2 = "DeletedNote"
+
     init {
         Log.d("tag","会走到MasterSqlite")
     }
 //更新表时版本要+++
-    var dbHelper = MyDatabaseHelper(context,"Database.db",null,6)
+    var dbHelper = MyDatabaseHelper(context,"Database.db",null,8)
 
     fun open()
     {
@@ -28,14 +31,13 @@ class MasterSqlite(var context: Context,var version:Int) {
         var db = dbHelper.readableDatabase
         var values = ContentValues()
         values.put("words",note.words)
-        Log.d("tag","成功put words")
         values.put("time",DateUtil.nowDateTime)//为什么加上这句话直接就存不进去了//表没更新
-        Log.d("tag","成功put time")
         //第一个参数是表名
-        db.insert("NoteTime",null,values)
-        Log.d("tag","成功insert")
+        db.insert("${TABLE_NAME1}",null,values)
+        //Log.d("tag","成功insert")
 
     }
+
 
     /*根据id来更新笔记*/
     fun updateData(note:Note)
@@ -47,7 +49,7 @@ class MasterSqlite(var context: Context,var version:Int) {
         values.put("words",note.words)
         values.put("time",DateUtil.nowDateTime)
 
-        db.update("NoteTime",values,"_id = ?", arrayOf(note.id.toString()))
+        db.update("${TABLE_NAME1}",values,"_id = ?", arrayOf(note.id.toString()))
         Log.d("tag","更新了笔记")
     }
 
@@ -58,14 +60,21 @@ class MasterSqlite(var context: Context,var version:Int) {
         //先通过id查到这条笔记
         var db = dbHelper.writableDatabase
 
-        db.delete("NoteTime","_id=?", arrayOf(note.id.toString()))
+        db.delete("${TABLE_NAME1}","_id=?", arrayOf(note.id.toString()))
+   //还要把这条加到回收站里面
+
+       var values = ContentValues()
+        values.put("words",note.words)
+        values.put("time",note.time)//为什么加上这句话直接就存不进去了//表没更新
+        //第一个参数是表名
+        db.insert("${TABLE_NAME2}",null,values)
     }
 
 
     fun findAllData():MutableList<Note>
     {
         var db = dbHelper.writableDatabase
-        var cursor = db.query("NoteTime",null,null,null,null,null,null)
+        var cursor = db.query("${TABLE_NAME1}",null,null,null,null,null,null)
 
         var noteList:MutableList<Note> = ArrayList()
        // var cursor = masterSqlite.findAllData()
@@ -86,6 +95,31 @@ class MasterSqlite(var context: Context,var version:Int) {
         cursor.close()
         return noteList
        // return cursor
+    }
+
+    fun findAllData2():MutableList<Note>
+    {
+        var db = dbHelper.writableDatabase
+        var cursor = db.query("${TABLE_NAME2}",null,null,null,null,null,null)
+
+        var noteList:MutableList<Note> = ArrayList()
+        // var cursor = masterSqlite.findAllData()
+
+        if(cursor.moveToFirst())
+        {
+            do {
+                var words = cursor.getString(cursor.getColumnIndex("words"))
+                var time = cursor.getString(cursor.getColumnIndex("time"))
+                var id = cursor.getString(cursor.getColumnIndex("_id"))
+                Log.d("tag","book author is"+ words)
+                var note1 = Note(words)
+                note1.time =time
+                note1.id = id.toInt()
+                noteList.add(note1)
+            }while (cursor.moveToNext())
+        }
+        cursor.close()
+        return noteList
     }
 
     }

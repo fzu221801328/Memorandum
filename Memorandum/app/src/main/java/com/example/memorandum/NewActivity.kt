@@ -16,6 +16,9 @@ import kotlinx.android.synthetic.main.note.*
 import kotlinx.android.synthetic.main.note_item.*
 
 class NewActivity: AppCompatActivity() {
+
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.note)
@@ -30,9 +33,10 @@ class NewActivity: AppCompatActivity() {
             saveNote()
         }
         //接受来自上一个活动的数据
-        var intent = intent
+       // var intent = intent
         //var id =intent.getIntExtra("id",0)
         //显示修改之前的这些
+
         var oldTime = intent.getStringExtra("time")
         var oldWords = intent.getStringExtra("words")
 
@@ -58,6 +62,8 @@ class NewActivity: AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         var mode =intent.getIntExtra("mode",-1)
         var id =intent.getIntExtra("_id",0)
+        var oldTime = intent.getStringExtra("time")
+        var oldWords = intent.getStringExtra("words")
 
         var intent2 = Intent()
 
@@ -74,6 +80,8 @@ class NewActivity: AppCompatActivity() {
                         }
                         else{
                             intent2.putExtra("mode",3)
+                            intent2.putExtra("time",oldTime)
+                            intent2.putExtra("words",oldWords)
                             intent2.putExtra("_id",id)
                         }
                         setResult(RESULT_OK,intent2)//返回了这个intent

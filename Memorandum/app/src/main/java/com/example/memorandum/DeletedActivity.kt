@@ -1,6 +1,8 @@
 package com.example.memorandum
 
 import android.app.Activity
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -14,22 +16,28 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.memorandum.R.drawable
 import com.example.memorandum.R.drawable.ic_dehaze_black_24dp
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_main.recycle
+import kotlinx.android.synthetic.main.deleted.*
+import kotlinx.android.synthetic.main.note.*
 import java.nio.ShortBuffer
 
-class MainActivity : AppCompatActivity() {
+class DeletedActivity : AppCompatActivity() {
 
     var noteList:MutableList<Note> = ArrayList()
 
-    var masterSqlite = MasterSqlite(this,5)
+    var masterSqlite = MasterSqlite(this,8)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.deleted)
 
-        setSupportActionBar(mainToolbar)//替换
+        setSupportActionBar(deletedToolbar)//替换
         //设置左边那个图标
-        mainToolbar.setNavigationIcon(R.drawable.ic_dehaze_black_24dp)
+        deletedToolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp)
 
+        deletedToolbar.setNavigationOnClickListener {
+            finish()
+        }
 
         initNotes()
         var layoutManager= LinearLayoutManager(this)
@@ -41,18 +49,6 @@ class MainActivity : AppCompatActivity() {
         )
         recycle.adapter=adapter
 
-
-        floatAddBtn.setOnClickListener{
-            Toast.makeText(this,"hahah",Toast.LENGTH_SHORT).show()
-            var intent = Intent()
-            intent.setClass(this,NewActivity::class.java)
-
-            intent.putExtra("time",DateUtil.nowDateTime)
-            intent.putExtra("mode",1)//1是新增
-            startActivityForResult(intent,1)//跳过去是新增
-
-            Log.d("tag","float跳过去啊")
-        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -90,12 +86,9 @@ class MainActivity : AppCompatActivity() {
             3 ->if (resultCode == RESULT_OK) {
                 Log.d("tag","requestCode = 3")
                 var id = data?.getIntExtra("_id",0)
-                var time = data?.getStringExtra("time")
-                var words = data?.getStringExtra("words")
+
                 var temp = Note("0")
                 temp.id = id!!
-                temp.time = time!!
-                temp.words = words!!
 
                 masterSqlite.deleteNote(temp)
                 refreshRecyclerView()
@@ -105,9 +98,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.main_menu,menu)
+        menuInflater.inflate(R.menu.deleted_menu,menu)
         return super.onCreateOptionsMenu(menu)
     }
+
 
     /*更改笔记后更新笔记列表*/
     fun refreshRecyclerView()
@@ -122,21 +116,9 @@ class MainActivity : AppCompatActivity() {
     //这里改成从数据库中读取
     fun initNotes(){
 
-        var noteList: MutableList<Note> = masterSqlite.findAllData()
+        var noteList: MutableList<Note> = masterSqlite.findAllData2()
         this.noteList = noteList
 
-
-
     }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        var intent2 = Intent(this,DeletedActivity::class.java)
-        when(item.itemId){
-            R.id.menu_recycle ->{
-                startActivity(intent2)
-            }
-        }
-                return super.onOptionsItemSelected(item)
-        }
 
 }

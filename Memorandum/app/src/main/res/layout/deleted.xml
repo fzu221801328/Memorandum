@@ -7,33 +7,22 @@
     android:orientation="vertical">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/editToolbar"
+        android:id="@+id/deletedToolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:theme="@style/ThemeOverlay.AppCompat.Light"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Dark"
         />
-<RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#D1D7F4">
-
-
-    <TextView
-        android:id="@+id/editTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="20dp"
-        />
-
-    <EditText
-        android:id="@+id/editNote"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycle"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/editTime"
-        android:textSize="20dp"
+        android:layout_height="match_parent"
+        android:layout_below="@id/mainToolbar"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:background="#D1D7F4"
         />
-
-</RelativeLayout>
 
 </LinearLayout>
