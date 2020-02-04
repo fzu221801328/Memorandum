@@ -57,44 +57,37 @@ class DeletedActivity : AppCompatActivity() {
         var returnedMode = data?.getIntExtra("mode",-1)
         when(returnedMode)
         {
-            1 -> {
-                Log.d("tag","requestCode = 1")
+            5 ->{//恢复
                 if (resultCode == RESULT_OK) {
-                    var returnedData = data?.getStringExtra("data_return")
-                    //Log.d("tag",returnedData.toString())
-                    //这一句要改成存入数据库啦
-                    var temp = Note(returnedData.toString())
-                    masterSqlite.addData(temp)
-                    refreshRecyclerView()
-                }
-            }
-            2 ->{//修改
-                if (resultCode == RESULT_OK) {
-                    Log.d("tag","requestCode = 2")
+                   // Log.d("tag","requestCode = 2")
 
                     var id = data?.getIntExtra("_id",0)
                     var words = data?.getStringExtra("words")
+                    var time = data?.getStringExtra("time")
                     //Log.d("tag","id = "+ id)
                     //Log.d("tag","words = "+ words)
                     var temp = Note(words.toString())
                     temp.id = id!!
+                    temp.time = time!!
 
-                    masterSqlite.updateData(temp)
+                    masterSqlite.recover(temp)
                     refreshRecyclerView()
                 }
             }
-            3 ->if (resultCode == RESULT_OK) {
-                Log.d("tag","requestCode = 3")
-                var id = data?.getIntExtra("_id",0)
+            4 -> {//彻底删除
+                if (resultCode == RESULT_OK) {
+                    //Log.d("tag","requestCode = 3")
+                    var id = data?.getIntExtra("_id", 0)
 
-                var temp = Note("0")
-                temp.id = id!!
+                    var temp = Note("0")
+                    temp.id = id!!
 
-                masterSqlite.deleteNote(temp)
-                refreshRecyclerView()
+                    masterSqlite.deleteNote2(temp)
+                    refreshRecyclerView()
+                }
             }
-        }
 
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -108,7 +101,7 @@ class DeletedActivity : AppCompatActivity() {
     {
         masterSqlite.open()
         if(noteList.size > 0) noteList.clear()
-        noteList.addAll(masterSqlite.findAllData())
+        noteList.addAll(masterSqlite.findAllData2())
         masterSqlite.close()
         deletedRecycle.adapter?.notifyDataSetChanged()
     }

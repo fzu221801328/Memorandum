@@ -49,16 +49,14 @@ class DeletedNoteAdapter(private val context: Context, private var mnoteList:Mut
             //Toast.makeText(context,note.id.toString(),Toast.LENGTH_SHORT).show()
 
             //这边跳去修改,传数据给下一个活动
-            /*intent.putExtra("_id",note.id)
+            intent.putExtra("_id",note.id)
             Log.d("tag","note.id = "+ note.id)
             intent.putExtra("words",note.words)
             Log.d("tag","note.words = "+ note.words)
             intent.putExtra("time",note.time)
-            intent.putExtra("mode",2)//2是修改*/
+            intent.putExtra("mode",2)//2是修改
 
-context.startActivity(intent)
-
-           // context.startActivityForResult(intent,2)
+            context.startActivityForResult(intent,2)
 
         }
 

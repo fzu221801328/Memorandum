@@ -70,6 +70,31 @@ class MasterSqlite(var context: Context,var version:Int) {
         db.insert("${TABLE_NAME2}",null,values)
     }
 
+    /*从回收站恢复一条笔记*/
+    fun recover(note:Note)
+    {
+        //从回收站删除，再添加回原来的地方
+        //先通过id查到这条笔记
+        var db = dbHelper.writableDatabase
+
+        db.delete("${TABLE_NAME2}","_id=?", arrayOf(note.id.toString()))
+        //还要把这条加到回收站里面
+
+        var values = ContentValues()
+        values.put("words",note.words)
+        values.put("time",note.time)//为什么加上这句话直接就存不进去了//表没更新
+        //第一个参数是表名
+        db.insert("${TABLE_NAME1}",null,values)
+    }
+
+    fun deleteNote2(note:Note)
+    {
+        //先通过id查到这条笔记
+        var db = dbHelper.writableDatabase
+
+        db.delete("${TABLE_NAME2}","_id=?", arrayOf(note.id.toString()))
+    }
+
     fun deleteAll()
     {
         var db = dbHelper.writableDatabase
@@ -84,6 +109,8 @@ class MasterSqlite(var context: Context,var version:Int) {
 
         db.execSQL("insert into ${TABLE_NAME2} select  * from ${TABLE_NAME1}")
     }
+
+
 
 
     fun findAllData():MutableList<Note>

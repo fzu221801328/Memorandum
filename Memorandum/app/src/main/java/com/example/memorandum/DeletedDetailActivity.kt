@@ -33,25 +33,23 @@ class DeletedDetailActivity: AppCompatActivity() {
         //直接就不要了那个view.onclicklistener（）？？
         deletedDetailToolbar.setNavigationOnClickListener {
 
-            //saveNote()
             finish()
         }
         //接受来自上一个活动的数据
         // var intent = intent
-        //var id =intent.getIntExtra("id",0)
+        var id =intent.getIntExtra("id",0)
         //显示修改之前的这些
 
-        /*var oldTime = intent.getStringExtra("time")
+        var oldTime = intent.getStringExtra("time")
         var oldWords = intent.getStringExtra("words")
 
         deletedNoteNote.setText(oldWords)
-        deletedNoteTime.setText(oldTime)*/
+        deletedNoteTime.setText(oldTime)
 
     }
 
     override fun onBackPressed() {
 
-        //saveNote()
         finish()
 
     }
@@ -61,7 +59,7 @@ class DeletedDetailActivity: AppCompatActivity() {
         return super.onCreateOptionsMenu(menu)
     }
 
-  /*  override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
         var mode =intent.getIntExtra("mode",-1)
         var id =intent.getIntExtra("_id",0)
         var oldTime = intent.getStringExtra("time")
@@ -70,22 +68,34 @@ class DeletedDetailActivity: AppCompatActivity() {
         var intent2 = Intent()
 
 
-
         when(item.itemId){
-            R.id.menu_delete ->{
+            R.id.menu_delete_forever->{
                 AlertDialog.Builder(this)
-                    .setMessage("你确定要删除该笔记吗？")
+                    .setMessage("你确定要彻底删除该笔记吗？")
                     .setPositiveButton(android.R.string.yes,DialogInterface.OnClickListener { dialog, which ->
-                        if(mode == 1)//新增笔记，就什么也不干
-                        {
-                            intent2.putExtra("mode",-1)
-                        }
-                        else{
-                            intent2.putExtra("mode",3)
+
+                            intent2.putExtra("mode",4)//4回收站删除
                             intent2.putExtra("time",oldTime)
                             intent2.putExtra("words",oldWords)
                             intent2.putExtra("_id",id)
-                        }
+
+                        setResult(RESULT_OK,intent2)//返回了这个intent
+                        finish()
+                    }).setNegativeButton(android.R.string.no,DialogInterface.OnClickListener { dialog, which ->
+                        dialog.dismiss()
+                    }).create().show()
+
+            }
+            R.id.menu_replay ->{
+                AlertDialog.Builder(this)
+                    .setMessage("你确定要恢复该笔记吗？")
+                    .setPositiveButton(android.R.string.yes,DialogInterface.OnClickListener { dialog, which ->
+
+                        intent2.putExtra("mode",5)//5回收站恢复
+                        intent2.putExtra("time",oldTime)
+                        intent2.putExtra("words",oldWords)
+                        intent2.putExtra("_id",id)
+
                         setResult(RESULT_OK,intent2)//返回了这个intent
                         finish()
                     }).setNegativeButton(android.R.string.no,DialogInterface.OnClickListener { dialog, which ->
@@ -97,32 +107,4 @@ class DeletedDetailActivity: AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    fun saveNote(){
-        //要通过intent传过来的mode来选择，是新建还是修改什么的
-        var mode =intent.getIntExtra("mode",-1)
-        //-1应该是出错了不用干什么
-        if(mode == 1)//要修改笔记，传新的值回去了
-        {
-            var intent2 = Intent()
-            intent2.putExtra("data_return",editNote.text.toString())
-            intent2.putExtra("mode",1)
-            setResult(RESULT_OK,intent2)//返回了这个intent
-            finish()//不能在oncreate里写
-        }
-        else if(mode == 2)
-        {
-            var intent2 = Intent()
-
-            var id =intent.getIntExtra("_id",0)
-
-            intent2.putExtra("_id",id)
-            intent2.putExtra("time",editTime.text.toString())
-            intent2.putExtra("words",editNote.text.toString())
-            intent2.putExtra("mode",2)
-
-            setResult(RESULT_OK,intent2)//返回了这个intent
-            finish()
-        }
-
-    }*/
 }

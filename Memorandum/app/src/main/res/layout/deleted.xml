@@ -12,6 +12,7 @@
         android:layout_height="?attr/actionBarSize"
         android:theme="@style/ThemeOverlay.AppCompat.Light"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Dark"
+        app:title="Recycle Bin"
         />
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/deletedRecycle"

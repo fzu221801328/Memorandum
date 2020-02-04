@@ -71,7 +71,6 @@ class MainActivity : AppCompatActivity() {
                     //这一句要改成存入数据库啦
                     var temp = Note(returnedData.toString())
                     masterSqlite.addData(temp)
-                    refreshRecyclerView()
                 }
             }
             2 ->{//修改
@@ -86,7 +85,6 @@ class MainActivity : AppCompatActivity() {
                     temp.id = id!!
 
                     masterSqlite.updateData(temp)
-                    refreshRecyclerView()
                 }
             }
             3 ->if (resultCode == RESULT_OK) {
@@ -100,10 +98,9 @@ class MainActivity : AppCompatActivity() {
                 temp.words = words!!
 
                 masterSqlite.deleteNote(temp)
-                refreshRecyclerView()
             }
         }
-
+        refreshRecyclerView()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -135,7 +132,7 @@ class MainActivity : AppCompatActivity() {
         var intent2 = Intent(this,DeletedActivity::class.java)
         when(item.itemId){
             R.id.menu_recycle ->{
-                startActivity(intent2)
+                startActivityForResult(intent2,9)//要forresult才能到那个函数
             }
             R.id.menu_clear ->{
                 AlertDialog.Builder(this)
