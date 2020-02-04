@@ -30,7 +30,7 @@ class MyDatabaseHelper(
             "_id integer primary key autoincrement,"+
             "words text,"+"time text)"
 
-    private var mContext=context;
+    private var mContext=context
 
     override fun onCreate(db: SQLiteDatabase?) {
         db?.execSQL(CREATE_NOTE)
@@ -45,4 +45,5 @@ class MyDatabaseHelper(
 
         onCreate(db)
     }
+
 }

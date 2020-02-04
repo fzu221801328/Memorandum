@@ -1,6 +1,8 @@
 package com.example.memorandum
 
 import android.app.Activity
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -134,6 +136,20 @@ class MainActivity : AppCompatActivity() {
         when(item.itemId){
             R.id.menu_recycle ->{
                 startActivity(intent2)
+            }
+            R.id.menu_clear ->{
+                AlertDialog.Builder(this)
+                    .setMessage("你确定要删除全部笔记吗？")
+                    .setPositiveButton(android.R.string.yes,
+                        DialogInterface.OnClickListener { dialog, which ->
+                            masterSqlite.copy()
+                            masterSqlite.deleteAll()
+                            refreshRecyclerView()
+                        }).setNegativeButton(android.R.string.no,
+                        DialogInterface.OnClickListener { dialog, which ->
+                            dialog.dismiss()
+                        }).create().show()
+
             }
         }
                 return super.onOptionsItemSelected(item)

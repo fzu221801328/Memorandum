@@ -70,6 +70,21 @@ class MasterSqlite(var context: Context,var version:Int) {
         db.insert("${TABLE_NAME2}",null,values)
     }
 
+    fun deleteAll()
+    {
+        var db = dbHelper.writableDatabase
+
+        db.delete("${TABLE_NAME1}",null, null)
+
+    }
+
+    fun copy()
+    {
+        var db = dbHelper.writableDatabase
+
+        db.execSQL("insert into ${TABLE_NAME2} select  * from ${TABLE_NAME1}")
+    }
+
 
     fun findAllData():MutableList<Note>
     {
