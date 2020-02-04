@@ -41,13 +41,13 @@ class DeletedActivity : AppCompatActivity() {
 
         initNotes()
         var layoutManager= LinearLayoutManager(this)
-        recycle.layoutManager=layoutManager
+        deletedRecycle.layoutManager=layoutManager
 
 
-        var adapter= NoteAdapter(this,
+        var adapter= DeletedNoteAdapter(this,
             noteList
         )
-        recycle.adapter=adapter
+        deletedRecycle.adapter=adapter
 
     }
 
@@ -110,7 +110,7 @@ class DeletedActivity : AppCompatActivity() {
         if(noteList.size > 0) noteList.clear()
         noteList.addAll(masterSqlite.findAllData())
         masterSqlite.close()
-        recycle.adapter?.notifyDataSetChanged()
+        deletedRecycle.adapter?.notifyDataSetChanged()
     }
 
     //这里改成从数据库中读取
