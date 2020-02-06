@@ -12,17 +12,21 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
 import android.widget.Toast
+import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.memorandum.R.drawable
 import com.example.memorandum.R.drawable.ic_dehaze_black_24dp
 import kotlinx.android.synthetic.main.activity_main.*
 import java.nio.ShortBuffer
 
+
 class MainActivity : AppCompatActivity() {
 
     var noteList:MutableList<Note> = ArrayList()
 
     var masterSqlite = MasterSqlite(this,5)
+
+    var adapter = NoteAdapter(this,noteList)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,9 +42,7 @@ class MainActivity : AppCompatActivity() {
         recycle.layoutManager=layoutManager
 
 
-        var adapter= NoteAdapter(this,
-            noteList
-        )
+        adapter= NoteAdapter(this, noteList)
         recycle.adapter=adapter
 
 
@@ -105,6 +107,25 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.main_menu,menu)
+
+        var mSearch = menu?.findItem(R.id.menu_search)
+        var mSearchView = mSearch?.actionView as SearchView
+        mSearchView.queryHint = "Search"
+
+        mSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            // 当点击搜索按钮时触发该方法
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            // 当搜索内容改变时触发该方法
+            override fun onQueryTextChange(newText: String?): Boolean {
+                adapter.filter.filter(newText)
+                Log.d("tag",newText+"内容改变了")
+                return false
+            }
+        })
+
         return super.onCreateOptionsMenu(menu)
     }
 

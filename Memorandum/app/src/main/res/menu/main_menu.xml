@@ -3,6 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/menu_search"
+        android:title="搜索"
+        android:icon="@drawable/ic_search_black_24dp"
+        app:showAsAction="always"
+        app:actionViewClass="androidx.appcompat.widget.SearchView" />
+
+    <item
         android:id="@+id/menu_recycle"
         android:icon="@drawable/ic_recycle_bin_restore_black_24dp"
         android:title="Recycle Bin"
@@ -15,6 +22,8 @@
         android:title="Clear"
         app:showAsAction = "always"
         />
+
+
 
 
 </menu>
