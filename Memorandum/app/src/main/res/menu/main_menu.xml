@@ -24,6 +24,27 @@
         />
 
 
+    <item
+        android:id="@+id/time_sort"
+        android:title="按时间顺序排序"
+        app:showAsAction="never"
+        />
+
+    <item
+        android:id="@+id/length_sort"
+        android:title="按长度排序"
+        app:showAsAction="never"
+        />
+
+    <item
+        android:id="@+id/char_sort"
+        android:title="按ASCII码排序"
+        app:showAsAction="never"
+        />
+
+
+
+
 
 
 </menu>

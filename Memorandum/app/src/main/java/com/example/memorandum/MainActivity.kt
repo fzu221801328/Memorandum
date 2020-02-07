@@ -28,6 +28,10 @@ class MainActivity : AppCompatActivity() {
 
     var adapter = NoteAdapter(this,noteList)
 
+    var timeFlag = 0
+    var lengthFlag = 0
+    var charFlag = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -139,6 +143,50 @@ class MainActivity : AppCompatActivity() {
         recycle.adapter?.notifyDataSetChanged()
     }
 
+    fun sortRecyclerView(select:Int)
+    {
+        masterSqlite.open()
+        if(noteList.size > 0) noteList.clear()
+        noteList.addAll(masterSqlite.findAllData())
+
+        when(select)
+        {
+            1 ->{
+                noteList.sortBy {
+                    it.words.length}
+                Log.d("tag","选了1")
+            }
+            2 ->{
+                noteList.sortByDescending{
+                    it.words.length }
+                Log.d("tag","选了2")
+            }
+            3 ->{
+                noteList.sortBy {
+                    it.translateTime(it.time)}
+                Log.d("tag","选了3")
+            }
+            4 ->{
+                noteList.sortByDescending{
+                    it.translateTime(it.time) }
+                Log.d("tag","选了4")
+            }
+            5 ->{
+                noteList.sortBy {
+                    it.words
+                }
+            }
+            6 ->{
+                noteList.sortByDescending {
+                    it.words
+                }
+            }
+        }
+
+        masterSqlite.close()
+        recycle.adapter?.notifyDataSetChanged()
+    }
+
     //这里改成从数据库中读取
     fun initNotes(){
 
@@ -151,6 +199,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         var intent2 = Intent(this,DeletedActivity::class.java)
+
+
         when(item.itemId){
             R.id.menu_recycle ->{
                 startActivityForResult(intent2,9)//要forresult才能到那个函数
@@ -168,6 +218,30 @@ class MainActivity : AppCompatActivity() {
                             dialog.dismiss()
                         }).create().show()
 
+            }
+            R.id.length_sort ->
+            {
+                if (lengthFlag % 2 == 0)//是偶数
+                sortRecyclerView(1)
+                else
+                sortRecyclerView(2)
+                lengthFlag++
+            }
+            R.id.time_sort ->
+            {
+                if (timeFlag % 2 == 0)//是偶数
+                    sortRecyclerView(3)
+                else
+                    sortRecyclerView(4)
+                timeFlag++
+            }
+            R.id.char_sort ->
+            {
+                if (charFlag % 2 == 0)//是偶数
+                    sortRecyclerView(5)
+                else
+                    sortRecyclerView(6)
+                charFlag++
             }
         }
                 return super.onOptionsItemSelected(item)
