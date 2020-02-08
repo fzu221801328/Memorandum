@@ -8,14 +8,14 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Filter
-import android.widget.Filterable
-import android.widget.TextView
+import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 
 class NoteAdapter(private val context: Context, private var mnoteList:MutableList<Note>) :
 
-    RecyclerView.Adapter<NoteAdapter.ViewHolder>(),Filterable {
+    RecyclerView.Adapter<NoteAdapter.ViewHolder>(),Filterable{
+
+    var flag = 0//是否显示checkbox
 
 
     private var backList //用来备份原始数据
@@ -27,16 +27,23 @@ class NoteAdapter(private val context: Context, private var mnoteList:MutableLis
         backList = mnoteList
     }
 
-    class ViewHolder constructor(view: View) : RecyclerView.ViewHolder(view), View.OnClickListener {
+    inner class ViewHolder constructor(view: View) : RecyclerView.ViewHolder(view)
+        , View.OnClickListener,View.OnLongClickListener {
 
         lateinit var note: Note
         var noteName: TextView
         var noteTime: TextView
+        var noteSelected: CheckBox
 
         init {
             this.noteName = view.findViewById(R.id.itemText)
             this.noteTime = view.findViewById(R.id.itemTime)
+            this.noteSelected = view.findViewById(R.id.item_checkBox)
             view.setOnClickListener(this)
+            view.setOnLongClickListener(this)
+
+
+
         }
 
         //绑定
@@ -45,6 +52,13 @@ class NoteAdapter(private val context: Context, private var mnoteList:MutableLis
             this.note = note
             noteName.setText(note.words)
             noteTime.setText(note.time)
+
+            if(flag == 1)
+            {
+                noteSelected.visibility = View.VISIBLE
+            }
+            else
+                noteSelected.visibility = View.GONE
         }
 
 
@@ -67,6 +81,26 @@ class NoteAdapter(private val context: Context, private var mnoteList:MutableLis
 
         }
 
+        override fun onLongClick(v: View?): Boolean {
+            Toast.makeText(context, "长按了", Toast.LENGTH_SHORT).show()
+
+            if(flag == 0)
+            {
+                //noteSelected.visibility = View.VISIBLE
+                flag = 1
+                notifyDataSetChanged()
+            }
+            else
+            {
+                flag = 0
+                notifyDataSetChanged()
+            }
+
+            return true
+
+        }
+
+
     }
 
 
@@ -74,7 +108,6 @@ class NoteAdapter(private val context: Context, private var mnoteList:MutableLis
 
         //val note = mnoteList[position]
         holder.bind(mnoteList[position])
-
     }
 
 
@@ -95,9 +128,6 @@ class NoteAdapter(private val context: Context, private var mnoteList:MutableLis
 
     }
 
-    /*override fun getFilter(): Filter {
-
-    }*/
 
     //加上inner内部类，可使用外部类的变量
     inner class Myfilter : Filter() {
@@ -151,4 +181,8 @@ class NoteAdapter(private val context: Context, private var mnoteList:MutableLis
         return mFilter
 
     }
+
+
+
+
 }

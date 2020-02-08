@@ -5,6 +5,18 @@
     android:layout_height="wrap_content"
     android:background="@drawable/note_shape"
 >
+    <CheckBox
+        android:id="@+id/item_checkBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:visibility="gone"
+        android:clickable="true"
+
+
+
+        />
+
     <TextView
         android:id="@+id/itemText"
         android:layout_width="wrap_content"
@@ -14,6 +26,7 @@
         android:singleLine="true"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
+        android:layout_toRightOf="@id/item_checkBox"
         />
 
     <TextView
@@ -25,6 +38,9 @@
         android:textSize="20dp"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
+        android:layout_toRightOf="@id/item_checkBox"
         />
+    
+
 
 </RelativeLayout>

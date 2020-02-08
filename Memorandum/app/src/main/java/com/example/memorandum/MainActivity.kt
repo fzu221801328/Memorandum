@@ -45,7 +45,6 @@ class MainActivity : AppCompatActivity() {
         var layoutManager= LinearLayoutManager(this)
         recycle.layoutManager=layoutManager
 
-
         adapter= NoteAdapter(this, noteList)
         recycle.adapter=adapter
 
