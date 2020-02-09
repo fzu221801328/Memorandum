@@ -44,7 +44,8 @@ class MainActivity : AppCompatActivity() {
         if(deletebutton?.visibility == View.VISIBLE) {
                deletebutton?.visibility = View.INVISIBLE
             floatbutton.visibility = View.VISIBLE
-            //还要去掉一个多选框
+
+            adapter.flag = 0//去掉多选框
             adapter.refreshRecyclerView()
         }
         else

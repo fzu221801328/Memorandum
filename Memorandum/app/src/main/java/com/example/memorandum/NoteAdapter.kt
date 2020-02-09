@@ -2,7 +2,9 @@ package com.example.memorandum
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.text.TextUtils
 import android.util.Log
@@ -123,26 +125,40 @@ class NoteAdapter(private val context: Context, private var mnoteList:MutableLis
             var floatbutton = ac.findViewById<FloatingActionButton>(R.id.floatAddBtn)
 
             deletebutton.setOnClickListener {
-                var list = getSelectedItem()
-                var note = Note("")
-                list.forEach{
-                    note.id = it
-                    masterSqlite.deleteNote(note)
+                AlertDialog.Builder(context)
+                    .setMessage("你确定要删除选中的笔记吗？")
+                    .setPositiveButton(android.R.string.yes,
+                        DialogInterface.OnClickListener { dialog, which ->
+                            var list = getSelectedItem()
+                            var note = Note("")
+                            list.forEach{
+                                note.id = it
+                                masterSqlite.deleteNote(note)
 
-                    /*mSelectedPositions.clear()
-                    var i = 0
-                    while (i < mnoteList.size) {
-                            mSelectedPositions.
-                                add(false);
+                                /*mSelectedPositions.clear()
+                                var i = 0
+                                while (i < mnoteList.size) {
+                                        mSelectedPositions.
+                                            add(false);
 
-                        i++
-                    }*/
-                    //mSelectedPositions.clear()//?删除完怎么把选择框清掉
-                    refreshRecyclerView()
+                                    i++
+                                }*/
+                                //mSelectedPositions.clear()
+                                //删除完把选择框清掉
+                                deletebutton?.visibility = View.INVISIBLE
+                                floatbutton.visibility = View.VISIBLE
 
-                }
+                                flag = 0//去掉多选框
+                                refreshRecyclerView()
 
+                            }
+
+                        }).setNegativeButton(android.R.string.no,
+                        DialogInterface.OnClickListener { dialog, which ->
+                            dialog.dismiss()
+                        }).create().show()
             }
+
 
             if(flag == 0)
             {
