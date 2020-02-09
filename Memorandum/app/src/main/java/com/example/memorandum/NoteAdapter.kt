@@ -31,9 +31,17 @@ class NoteAdapter(private val context: Context, private var mnoteList:MutableLis
     private var mFilter: Myfilter = Myfilter()
 
     var mSelectedPositions = SparseBooleanArray()//是一个存布尔值的pair
+    // var checkStatus:MutableMap<Int, Boolean> = mutableMapOf()//用来记录所有checkbox的状态
 
     init {
         backList = mnoteList
+
+        ;//在哪里改的？
+        var i = 0
+        while( i < mnoteList.size ) {
+            mSelectedPositions.put(i, false);// 默认所有的checkbox都是没选中
+            i++
+        }
     }
 
 
@@ -129,7 +137,7 @@ class NoteAdapter(private val context: Context, private var mnoteList:MutableLis
 
                         i++
                     }*/
-                    mSelectedPositions.clear()//?删除完怎么把选择框清掉
+                    //mSelectedPositions.clear()//?删除完怎么把选择框清掉
                     refreshRecyclerView()
 
                 }
@@ -156,6 +164,7 @@ class NoteAdapter(private val context: Context, private var mnoteList:MutableLis
                 notifyDataSetChanged()
             }
 
+            refreshRecyclerView()//不保留打勾
             return true
 
         }
@@ -169,18 +178,20 @@ class NoteAdapter(private val context: Context, private var mnoteList:MutableLis
         //val note = mnoteList[position]
         holder.bind(mnoteList[position])
 
+        holder.noteSelected.setOnCheckedChangeListener(null);//清掉监听器
+        holder.noteSelected.setChecked(mSelectedPositions.get(position)!!);//设置选中状态
+
         holder.noteSelected.setOnClickListener {
 
-                if (isItemChecked(position)) {
-                    setItemChecked(position, false);
-                    Toast.makeText(context,"不选"+mnoteList[position].words,Toast.LENGTH_SHORT).show()
-                } else {
-                    setItemChecked(position, true);
-                    Toast.makeText(context,"选中"+mnoteList[position].words,Toast.LENGTH_SHORT).show()
-                }
-
-
+            if (isItemChecked(position)) {
+                setItemChecked(position, false);
+                Toast.makeText(context,"不选"+mnoteList[position].words,Toast.LENGTH_SHORT).show()
+            } else {
+                setItemChecked(position, true);
+                Toast.makeText(context,"选中"+mnoteList[position].words,Toast.LENGTH_SHORT).show()
+            }
         }
+
     }
 
     /*获得选中条目的结果*/
@@ -278,7 +289,17 @@ class NoteAdapter(private val context: Context, private var mnoteList:MutableLis
         if(mnoteList.size > 0) mnoteList.clear()
         mnoteList.addAll(masterSqlite.findAllData())
         masterSqlite.close()
+
+        //不保留打勾
+        mSelectedPositions.clear()
+        var i = 0
+        while( i < mnoteList.size ) {
+            mSelectedPositions.put(i, false);// 默认所有的checkbox都是没选中
+            i++
+        }
+
         notifyDataSetChanged()
     }
 
 }
+

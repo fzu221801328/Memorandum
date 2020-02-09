@@ -139,7 +139,9 @@ class MasterSqlite(var context: Context,var version:Int) {
         var db = dbHelper.writableDatabase
         Log.d("tag","copy")
 
-        db.execSQL("insert into ${TABLE_NAME2} select  * from ${TABLE_NAME1}")
+        //db.execSQL("insert into ${TABLE_NAME2} select  * from ${TABLE_NAME1}")
+        //如果主键相同，就不行
+        db.execSQL("insert into ${TABLE_NAME2} (words,time)"+ " select words,time from ${TABLE_NAME1}")
         Log.d("tag","copyno")
     }
 
