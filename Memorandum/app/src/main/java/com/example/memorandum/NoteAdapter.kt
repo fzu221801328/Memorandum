@@ -1,15 +1,19 @@
 package com.example.memorandum
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.text.TextUtils
 import android.util.Log
+import android.util.SparseBooleanArray
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+
 
 class NoteAdapter(private val context: Context, private var mnoteList:MutableList<Note>) :
 
@@ -17,17 +21,36 @@ class NoteAdapter(private val context: Context, private var mnoteList:MutableLis
 
     var flag = 0//是否显示checkbox
 
+    //弄成一个？
+    var masterSqlite = MasterSqlite(context,5)
+
 
     private var backList //用来备份原始数据
             : MutableList<Note>? = null
 
     private var mFilter: Myfilter = Myfilter()
 
+    var mSelectedPositions = SparseBooleanArray()//是一个存布尔值的pair
+
     init {
         backList = mnoteList
     }
 
-    inner class ViewHolder constructor(view: View) : RecyclerView.ViewHolder(view)
+
+
+    private fun setItemChecked(position: Int, isChecked: Boolean) {
+        mSelectedPositions.put(position, isChecked)
+    }
+
+    //根据位置判断条目是否选中
+    private fun isItemChecked(position: Int): Boolean {
+        return mSelectedPositions[position]
+    }
+
+
+
+
+        inner class ViewHolder constructor(view: View) : RecyclerView.ViewHolder(view)
         , View.OnClickListener,View.OnLongClickListener {
 
         lateinit var note: Note
@@ -41,6 +64,7 @@ class NoteAdapter(private val context: Context, private var mnoteList:MutableLis
             this.noteSelected = view.findViewById(R.id.item_checkBox)
             view.setOnClickListener(this)
             view.setOnLongClickListener(this)
+            setIsRecyclable(false)
 
 
 
@@ -81,18 +105,54 @@ class NoteAdapter(private val context: Context, private var mnoteList:MutableLis
 
         }
 
-        override fun onLongClick(v: View?): Boolean {
+        @SuppressLint("RestrictedApi")
+        override fun onLongClick(view: View?): Boolean {
             Toast.makeText(context, "长按了", Toast.LENGTH_SHORT).show()
+
+            /*隐藏一些，显示一些*/
+            var ac = context as Activity
+            var deletebutton = ac.findViewById<Button>(R.id.delete_button)
+            var floatbutton = ac.findViewById<FloatingActionButton>(R.id.floatAddBtn)
+
+            deletebutton.setOnClickListener {
+                var list = getSelectedItem()
+                var note = Note("")
+                list.forEach{
+                    note.id = it
+                    masterSqlite.deleteNote(note)
+
+                    /*mSelectedPositions.clear()
+                    var i = 0
+                    while (i < mnoteList.size) {
+                            mSelectedPositions.
+                                add(false);
+
+                        i++
+                    }*/
+                    mSelectedPositions.clear()//?删除完怎么把选择框清掉
+                    refreshRecyclerView()
+
+                }
+
+            }
 
             if(flag == 0)
             {
                 //noteSelected.visibility = View.VISIBLE
                 flag = 1
+                deletebutton?.visibility = View.VISIBLE
+                floatbutton.visibility = View.INVISIBLE
+
+
+                Log.d("tag","floatbutton是否显示"+ View.INVISIBLE.toString())
                 notifyDataSetChanged()
             }
             else
             {
                 flag = 0
+
+                deletebutton?.visibility = View.INVISIBLE
+                floatbutton.visibility = View.VISIBLE
                 notifyDataSetChanged()
             }
 
@@ -108,10 +168,37 @@ class NoteAdapter(private val context: Context, private var mnoteList:MutableLis
 
         //val note = mnoteList[position]
         holder.bind(mnoteList[position])
+
+        holder.noteSelected.setOnClickListener {
+
+                if (isItemChecked(position)) {
+                    setItemChecked(position, false);
+                    Toast.makeText(context,"不选"+mnoteList[position].words,Toast.LENGTH_SHORT).show()
+                } else {
+                    setItemChecked(position, true);
+                    Toast.makeText(context,"选中"+mnoteList[position].words,Toast.LENGTH_SHORT).show()
+                }
+
+
+        }
+    }
+
+    /*获得选中条目的结果*/
+    fun  getSelectedItem(): MutableList<Int> {
+        var selectList:MutableList<Int> = ArrayList()
+        var i = 0
+        while (i < mnoteList.size) {
+            if (isItemChecked(i)) {
+                mSelectedPositions.delete(i)//然后怎么把打勾去掉
+                selectList.add(mnoteList[i].id);
+            }
+            i++
+        }
+        return selectList
     }
 
 
-    override fun getItemCount(): Int {
+        override fun getItemCount(): Int {
 
         return mnoteList.size
 
@@ -183,6 +270,15 @@ class NoteAdapter(private val context: Context, private var mnoteList:MutableLis
     }
 
 
-
+    /*更改笔记后更新笔记列表*/
+    fun refreshRecyclerView()
+    {
+        //flag = 0
+        masterSqlite.open()
+        if(mnoteList.size > 0) mnoteList.clear()
+        mnoteList.addAll(masterSqlite.findAllData())
+        masterSqlite.close()
+        notifyDataSetChanged()
+    }
 
 }

@@ -33,7 +33,13 @@ class MasterSqlite(var context: Context,var version:Int) {
         values.put("words",note.words)
         values.put("time",DateUtil.nowDateTime)//为什么加上这句话直接就存不进去了//表没更新
         //第一个参数是表名
-        db.insert("${TABLE_NAME1}",null,values)
+        var i = 0
+        while (i < 15)
+        {
+            db.insert("${TABLE_NAME1}",null,values)
+            i++
+        }
+
         //Log.d("tag","成功insert")
 
     }
@@ -53,19 +59,44 @@ class MasterSqlite(var context: Context,var version:Int) {
         Log.d("tag","更新了笔记")
     }
 
+    fun queryNote(id:Int):Note
+    {
+        var note = Note("")
+        note.id = id
+        var db = dbHelper.writableDatabase
 
+        var cursor = db.query("${TABLE_NAME1}",null,"_id = ?", arrayOf(id.toString()),null,null,null)
+
+        if(cursor.moveToFirst())
+        {
+                note.words = cursor.getString(cursor.getColumnIndex("words"))
+                note.time = cursor.getString(cursor.getColumnIndex("time"))
+
+        }
+        cursor.close()
+
+        //db.delete("${TABLE_NAME1}","_id=?", arrayOf(id.toString()))
+        return note
+    }
 
     fun deleteNote(note:Note)
     {
         //先通过id查到这条笔记
         var db = dbHelper.writableDatabase
 
+        var note2:Note = queryNote(note.id)//比一下他们两个一不一样,一样的
+
+        /*Log.d("tag","note.words = "+ note.words)
+        Log.d("tag","note2.words = "+ note2.words)
+        Log.d("tag","note.time = "+ note.time)
+        Log.d("tag","note2.time = "+ note2.time)*/
+
         db.delete("${TABLE_NAME1}","_id=?", arrayOf(note.id.toString()))
    //还要把这条加到回收站里面
 
        var values = ContentValues()
-        values.put("words",note.words)
-        values.put("time",note.time)//为什么加上这句话直接就存不进去了//表没更新
+        values.put("words",note2.words)
+        values.put("time",note2.time)//为什么加上这句话直接就存不进去了//表没更新
         //第一个参数是表名
         db.insert("${TABLE_NAME2}",null,values)
     }
@@ -106,8 +137,10 @@ class MasterSqlite(var context: Context,var version:Int) {
     fun copy()
     {
         var db = dbHelper.writableDatabase
+        Log.d("tag","copy")
 
         db.execSQL("insert into ${TABLE_NAME2} select  * from ${TABLE_NAME1}")
+        Log.d("tag","copyno")
     }
 
 
@@ -127,7 +160,7 @@ class MasterSqlite(var context: Context,var version:Int) {
                 var words = cursor.getString(cursor.getColumnIndex("words"))
                 var time = cursor.getString(cursor.getColumnIndex("time"))
                 var id = cursor.getString(cursor.getColumnIndex("_id"))
-                Log.d("tag","book author is"+ words)
+                //Log.d("tag","book author is"+ words)
                 var note1 = Note(words)
                 note1.time =time
                 note1.id = id.toInt()
@@ -153,7 +186,7 @@ class MasterSqlite(var context: Context,var version:Int) {
                 var words = cursor.getString(cursor.getColumnIndex("words"))
                 var time = cursor.getString(cursor.getColumnIndex("time"))
                 var id = cursor.getString(cursor.getColumnIndex("_id"))
-                Log.d("tag","book author is"+ words)
+                //Log.d("tag","book author is"+ words)
                 var note1 = Note(words)
                 note1.time =time
                 note1.id = id.toInt()

@@ -1,5 +1,6 @@
 package com.example.memorandum
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.DialogInterface
@@ -11,11 +12,13 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
+import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.memorandum.R.drawable
 import com.example.memorandum.R.drawable.ic_dehaze_black_24dp
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.activity_main.*
 import java.nio.ShortBuffer
 
@@ -31,6 +34,22 @@ class MainActivity : AppCompatActivity() {
     var timeFlag = 0
     var lengthFlag = 0
     var charFlag = 0
+
+    @SuppressLint("RestrictedApi")
+    override fun onBackPressed() {
+        var deletebutton = findViewById<Button>(R.id.delete_button)
+        var floatbutton = findViewById<FloatingActionButton>(R.id.floatAddBtn)
+
+
+        if(deletebutton?.visibility == View.VISIBLE) {
+               deletebutton?.visibility = View.INVISIBLE
+            floatbutton.visibility = View.VISIBLE
+            //还要去掉一个多选框
+            adapter.refreshRecyclerView()
+        }
+        else
+         super.onBackPressed()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -209,8 +228,11 @@ class MainActivity : AppCompatActivity() {
                     .setMessage("你确定要删除全部笔记吗？")
                     .setPositiveButton(android.R.string.yes,
                         DialogInterface.OnClickListener { dialog, which ->
+                            Log.d("tag","哪个不行")
                             masterSqlite.copy()
+                            Log.d("tag","copy不行")
                             masterSqlite.deleteAll()
+                            Log.d("tag","deleteall不行")
                             refreshRecyclerView()
                         }).setNegativeButton(android.R.string.no,
                         DialogInterface.OnClickListener { dialog, which ->
@@ -245,5 +267,7 @@ class MainActivity : AppCompatActivity() {
         }
                 return super.onOptionsItemSelected(item)
         }
+
+
 
 }
