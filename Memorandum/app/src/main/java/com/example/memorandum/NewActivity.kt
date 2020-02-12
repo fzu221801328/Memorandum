@@ -39,9 +39,11 @@ class NewActivity: AppCompatActivity() {
 
         var oldTime = intent.getStringExtra("time")
         var oldWords = intent.getStringExtra("words")
+        var oldLocation = intent.getStringExtra("location")
 
         editNote.setText(oldWords)
         editTime.setText(oldTime)
+        edit_location.setText(oldLocation)
 
 
 
@@ -99,15 +101,15 @@ class NewActivity: AppCompatActivity() {
         //要通过intent传过来的mode来选择，是新建还是修改什么的
         var mode =intent.getIntExtra("mode",-1)
         //-1应该是出错了不用干什么
-        if(mode == 1)//要修改笔记，传新的值回去了
+        if(mode == 1)//新增笔记
         {
             var intent2 = Intent()
-            intent2.putExtra("data_return",editNote.text.toString())
+            intent2.putExtra("words",editNote.text.toString())
             intent2.putExtra("mode",1)
             setResult(RESULT_OK,intent2)//返回了这个intent
             finish()//不能在oncreate里写
         }
-        else if(mode == 2)
+        else if(mode == 2)//修改笔记
         {
             var intent2 = Intent()
 

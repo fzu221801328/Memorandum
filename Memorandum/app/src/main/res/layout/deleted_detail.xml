@@ -35,6 +35,13 @@
             android:textSize="25dp"
             />
 
+        <TextView
+            android:id="@+id/deleted_location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:textSize="20dp"
+            />
     </RelativeLayout>
 
 </LinearLayout>

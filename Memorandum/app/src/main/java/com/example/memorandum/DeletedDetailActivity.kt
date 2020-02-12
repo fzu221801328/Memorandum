@@ -42,10 +42,11 @@ class DeletedDetailActivity: AppCompatActivity() {
 
         var oldTime = intent.getStringExtra("time")
         var oldWords = intent.getStringExtra("words")
+        var location = intent.getStringExtra("location")
 
         deletedNoteNote.setText(oldWords)
         deletedNoteTime.setText(oldTime)
-
+        deleted_location.setText(location)
     }
 
     override fun onBackPressed() {

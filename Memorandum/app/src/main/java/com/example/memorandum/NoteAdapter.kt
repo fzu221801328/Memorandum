@@ -24,7 +24,7 @@ class NoteAdapter(private val context: Context, private var mnoteList:MutableLis
     var flag = 0//是否显示checkbox
 
     //弄成一个？
-    var masterSqlite = MasterSqlite(context,5)
+    var masterSqlite = MasterSqlite(context)
 
 
     private var backList //用来备份原始数据
@@ -107,6 +107,7 @@ class NoteAdapter(private val context: Context, private var mnoteList:MutableLis
             intent.putExtra("words", note.words)
             Log.d("tag", "note.words = " + note.words)
             intent.putExtra("time", note.time)
+            intent.putExtra("location",note.location)
             intent.putExtra("mode", 2)//2是修改
 
             context.startActivityForResult(intent, 2)

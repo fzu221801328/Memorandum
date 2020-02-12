@@ -27,7 +27,7 @@ class DeletedActivity : AppCompatActivity() {
 
     var noteList:MutableList<Note> = ArrayList()
 
-    var masterSqlite = MasterSqlite(this,8)
+    var masterSqlite = MasterSqlite(this)
 
     var adapter = DeletedNoteAdapter(this,noteList)
 
@@ -105,7 +105,7 @@ class DeletedActivity : AppCompatActivity() {
     {
         masterSqlite.open()
         if(noteList.size > 0) noteList.clear()
-        noteList.addAll(masterSqlite.findAllData2())
+        noteList.addAll(masterSqlite.findAllData(2))
         masterSqlite.close()
         deletedRecycle.adapter?.notifyDataSetChanged()
     }
@@ -113,7 +113,7 @@ class DeletedActivity : AppCompatActivity() {
     //这里改成从数据库中读取
     fun initNotes(){
 
-        var noteList: MutableList<Note> = masterSqlite.findAllData2()
+        var noteList: MutableList<Note> = masterSqlite.findAllData(2)
         this.noteList = noteList
 
     }

@@ -21,7 +21,7 @@ class DeletedNoteAdapter(private val context: Context, private var mnoteList:Mut
 
     var flag = 0//是否显示checkbox
 
-    var masterSqlite = MasterSqlite(context,5)
+    var masterSqlite = MasterSqlite(context)
 
     var mSelectedPositions = SparseBooleanArray()//是一个存布尔值的pair
 
@@ -88,6 +88,7 @@ class DeletedNoteAdapter(private val context: Context, private var mnoteList:Mut
             intent.putExtra("words",note.words)
             Log.d("tag","note.words = "+ note.words)
             intent.putExtra("time",note.time)
+            intent.putExtra("location",note.location)
             intent.putExtra("mode",2)//2是修改
 
             context.startActivityForResult(intent,2)
@@ -245,7 +246,7 @@ class DeletedNoteAdapter(private val context: Context, private var mnoteList:Mut
 
         masterSqlite.open()
         if(mnoteList.size > 0) mnoteList.clear()
-        mnoteList.addAll(masterSqlite.findAllData2())
+        mnoteList.addAll(masterSqlite.findAllData(2))
         masterSqlite.close()
 
         //不保留打勾
