@@ -1,5 +1,6 @@
 package com.example.memorandum
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.DialogInterface
@@ -11,6 +12,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
+import android.widget.Button
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.memorandum.R.drawable
@@ -26,6 +28,8 @@ class DeletedActivity : AppCompatActivity() {
     var noteList:MutableList<Note> = ArrayList()
 
     var masterSqlite = MasterSqlite(this,8)
+
+    var adapter = DeletedNoteAdapter(this,noteList)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,7 +48,7 @@ class DeletedActivity : AppCompatActivity() {
         deletedRecycle.layoutManager=layoutManager
 
 
-        var adapter= DeletedNoteAdapter(this,
+        adapter= DeletedNoteAdapter(this,
             noteList
         )
         deletedRecycle.adapter=adapter
@@ -114,4 +118,58 @@ class DeletedActivity : AppCompatActivity() {
 
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        when(item.itemId){
+            R.id.deleted_clear ->{
+                AlertDialog.Builder(this)
+                    .setMessage("你确定要彻底删除全部笔记吗？")
+                    .setPositiveButton(android.R.string.yes,
+                        DialogInterface.OnClickListener { dialog, which ->
+                            masterSqlite.deleteAll2()
+                            refreshRecyclerView()
+                        }).setNegativeButton(android.R.string.no,
+                        DialogInterface.OnClickListener { dialog, which ->
+                            dialog.dismiss()
+                        }).create().show()
+
+            }
+            R.id.deleted_replay ->{
+                AlertDialog.Builder(this)
+                    .setMessage("你要恢复全部笔记吗？")
+                    .setPositiveButton(android.R.string.yes,
+                        DialogInterface.OnClickListener { dialog, which ->
+                            masterSqlite.copy2()
+                            masterSqlite.deleteAll2()
+                            refreshRecyclerView()
+                        }).setNegativeButton(android.R.string.no,
+                        DialogInterface.OnClickListener { dialog, which ->
+                            dialog.dismiss()
+                        }).create().show()
+
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    @SuppressLint("RestrictedApi")
+    override fun onBackPressed() {
+        var deletebutton = findViewById<Button>(R.id.delete_forever_button)
+        var recoverbutton = findViewById<Button>(R.id.recover_button)
+
+        if(deletebutton.visibility == View.VISIBLE ||
+            recoverbutton.visibility == View.VISIBLE  ) {
+
+            recoverbutton.visibility = View.INVISIBLE
+            deletebutton.visibility = View.INVISIBLE
+
+            //要是同一个adapter
+            adapter.flag = 0//去掉多选框
+            adapter.refreshRecyclerView()
+
+            Log.d("tag","flag = "+ adapter.flag)
+        }
+        else
+            super.onBackPressed()
+    }
 }

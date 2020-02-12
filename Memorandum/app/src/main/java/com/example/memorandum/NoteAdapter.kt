@@ -74,9 +74,7 @@ class NoteAdapter(private val context: Context, private var mnoteList:MutableLis
             this.noteSelected = view.findViewById(R.id.item_checkBox)
             view.setOnClickListener(this)
             view.setOnLongClickListener(this)
-            setIsRecyclable(false)
-
-
+            setIsRecyclable(false)//?
 
         }
 

@@ -34,11 +34,11 @@ class MasterSqlite(var context: Context,var version:Int) {
         values.put("time",DateUtil.nowDateTime)//为什么加上这句话直接就存不进去了//表没更新
         //第一个参数是表名
         var i = 0
-        while (i < 15)
-        {
+        //while (i < 15)
+        //{
             db.insert("${TABLE_NAME1}",null,values)
-            i++
-        }
+          //  i++
+        //}
 
         //Log.d("tag","成功insert")
 
@@ -79,6 +79,26 @@ class MasterSqlite(var context: Context,var version:Int) {
         return note
     }
 
+    fun queryNote2(id:Int):Note
+    {
+        var note = Note("")
+        note.id = id
+        var db = dbHelper.writableDatabase
+
+        var cursor = db.query("${TABLE_NAME2}",null,"_id = ?", arrayOf(id.toString()),null,null,null)
+
+        if(cursor.moveToFirst())
+        {
+            note.words = cursor.getString(cursor.getColumnIndex("words"))
+            note.time = cursor.getString(cursor.getColumnIndex("time"))
+
+        }
+        cursor.close()
+
+        //db.delete("${TABLE_NAME1}","_id=?", arrayOf(id.toString()))
+        return note
+    }
+
     fun deleteNote(note:Note)
     {
         //先通过id查到这条笔记
@@ -107,13 +127,14 @@ class MasterSqlite(var context: Context,var version:Int) {
         //从回收站删除，再添加回原来的地方
         //先通过id查到这条笔记
         var db = dbHelper.writableDatabase
+        var note2:Note = queryNote2(note.id)
 
         db.delete("${TABLE_NAME2}","_id=?", arrayOf(note.id.toString()))
         //还要把这条加到回收站里面
 
         var values = ContentValues()
-        values.put("words",note.words)
-        values.put("time",note.time)//为什么加上这句话直接就存不进去了//表没更新
+        values.put("words",note2.words)
+        values.put("time",note2.time)//为什么加上这句话直接就存不进去了//表没更新
         //第一个参数是表名
         db.insert("${TABLE_NAME1}",null,values)
     }
@@ -131,7 +152,13 @@ class MasterSqlite(var context: Context,var version:Int) {
         var db = dbHelper.writableDatabase
 
         db.delete("${TABLE_NAME1}",null, null)
+    }
 
+    fun deleteAll2()
+    {
+        var db = dbHelper.writableDatabase
+
+        db.delete("${TABLE_NAME2}",null, null)
     }
 
     fun copy()
@@ -145,7 +172,12 @@ class MasterSqlite(var context: Context,var version:Int) {
         Log.d("tag","copyno")
     }
 
+    fun copy2()
+    {
+        var db = dbHelper.writableDatabase
 
+        db.execSQL("insert into ${TABLE_NAME1} (words,time)"+ " select words,time from ${TABLE_NAME2}")
+    }
 
 
     fun findAllData():MutableList<Note>
