@@ -108,16 +108,16 @@ public class CalendarReminderUtils(private val context: Context) {
     }
 
     @SuppressLint("MissingPermission")
-    fun insert() {
+    fun insert(year:Int,month:Int,date:Int,hour:Int,minute:Int) {
         var calID: Long = 1
         var startMillis: Long = 0
         var endMillis: Long = 0
         var beginTime = Calendar.getInstance()
         //月从0开始
-        beginTime.set(2019, 10, 11, 7, 30)
+        beginTime.set(year,month,date,hour,minute)
         startMillis = beginTime.timeInMillis
         var endTime = Calendar.getInstance()
-        endTime.set(2019, 10, 12, 8, 45)
+        endTime.set(year,month,date,hour+1,minute)
         endMillis = endTime.timeInMillis
 
         var timeZone = TimeZone.getDefault().id

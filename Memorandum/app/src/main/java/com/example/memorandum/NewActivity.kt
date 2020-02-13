@@ -1,18 +1,24 @@
 package com.example.memorandum
 
+import android.annotation.TargetApi
 import android.app.*
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.note.*
 
 import kotlinx.android.synthetic.main.note_item.*
+import java.text.Normalizer
 import java.util.*
 
 @Suppress("DEPRECATION")
@@ -26,6 +32,8 @@ class NewActivity: AppCompatActivity() {
 
     val DATE_DIALOG = 1
     val TIME_DIALOG = 2
+
+    var PERMISSION_REQUEST_CODE = 2
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,6 +83,8 @@ class NewActivity: AppCompatActivity() {
         return super.onCreateOptionsMenu(menu)
     }
 
+    @TargetApi(Build.VERSION_CODES.N)
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         var mode =intent.getIntExtra("mode",-1)
         var id =intent.getIntExtra("_id",0)
@@ -108,10 +118,32 @@ class NewActivity: AppCompatActivity() {
 
             }
             R.id.menu_alarm ->{
+                //日历相关
+                var c = CalendarReminderUtils(this)
+                checkCalendarPermission()
+                c.checkAndAddCalendarAccount()
+
+
                 dateDisplay.visibility = View.VISIBLE
                 timeDisplay.visibility = View.VISIBLE
+                addAlarmButton.visibility = View.VISIBLE
                 showDialog(TIME_DIALOG)
                 showDialog(DATE_DIALOG)
+
+                addAlarmButton.setOnClickListener {
+                    if (dateDisplay.text.toString() != "我是默认日期显示" &&
+                        timeDisplay.text.toString() != "我是默认时间显示")
+                    {
+                        c.insert(mYear,mMonth,mDay,mHour,mMinute)
+                    }
+                    else
+                    {
+                        Toast.makeText(this,"添加失败",Toast.LENGTH_LONG).show()
+                    }
+
+
+                }
+
             }
         }
         return super.onOptionsItemSelected(item)
@@ -184,4 +216,41 @@ class NewActivity: AppCompatActivity() {
         mMinute = minute
         displayTime()
     }
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    private fun checkCalendarPermission() {
+        var readPermission = checkSelfPermission(android.Manifest.permission.READ_CALENDAR)
+        var writePermission = checkSelfPermission(android.Manifest.permission.WRITE_CALENDAR)
+        if (readPermission == PackageManager.PERMISSION_GRANTED
+            && writePermission == PackageManager.PERMISSION_GRANTED
+        ) {
+            Log.d("tag", "有 permission")
+
+        }  //表示有权限
+        else {
+            Log.d("tag", "require permission")
+            requestPermissions(
+                arrayOf(
+                    android.Manifest.permission.READ_CALENDAR,
+                    android.Manifest.permission.WRITE_CALENDAR
+                ), PERMISSION_REQUEST_CODE
+            )
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        if (grantResults.size == 2 && grantResults[0] == PackageManager.PERMISSION_GRANTED
+            && grantResults[1] == PackageManager.PERMISSION_GRANTED
+        ) {
+            //有权限
+            Log.d("tag", "有 permission")
+        } else {
+            finish()
+        }
+    }
+
 }

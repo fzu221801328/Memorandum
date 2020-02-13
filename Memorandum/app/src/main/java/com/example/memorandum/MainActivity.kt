@@ -49,7 +49,6 @@ class MainActivity : AppCompatActivity() {
     var lengthFlag = 0
     var charFlag = 0
 
-    var PERMISSION_REQUEST_CODE = 2
 
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -87,11 +86,6 @@ class MainActivity : AppCompatActivity() {
             Log.d("tag", "float跳过去啊")
         }
 
-        //日历相关
-        var c = CalendarReminderUtils(this)
-        checkCalendarPermission()
-        c.checkAndAddCalendarAccount()
-        c.insert()
     }
 
     @SuppressLint("RestrictedApi")
@@ -349,27 +343,7 @@ class MainActivity : AppCompatActivity() {
         mLocationClient.stop()
     }
 
-    /*用日历的时候申请权限*/
-    @RequiresApi(Build.VERSION_CODES.M)
-    private fun checkCalendarPermission() {
-        var readPermission = checkSelfPermission(android.Manifest.permission.READ_CALENDAR)
-        var writePermission = checkSelfPermission(android.Manifest.permission.WRITE_CALENDAR)
-        if (readPermission == PackageManager.PERMISSION_GRANTED
-            && writePermission == PackageManager.PERMISSION_GRANTED
-        ) {
-            Log.d("tag", "有 permission")
 
-        }  //表示有权限
-        else {
-            Log.d("tag", "require permission")
-            requestPermissions(
-                arrayOf(
-                    android.Manifest.permission.READ_CALENDAR,
-                    android.Manifest.permission.WRITE_CALENDAR
-                ), PERMISSION_REQUEST_CODE
-            )
-        }
-    }
 
 
     override fun onRequestPermissionsResult(
@@ -394,16 +368,6 @@ class MainActivity : AppCompatActivity() {
                     requestLocation()
                 } else {
                     Toast.makeText(this, "发生未知错误", Toast.LENGTH_LONG).show()
-                    finish()
-                }
-            }
-            2 -> {
-                if (grantResults.size == 2 && grantResults[0] == PackageManager.PERMISSION_GRANTED
-                    && grantResults[1] == PackageManager.PERMISSION_GRANTED
-                ) {
-                    //有权限
-                    Log.d("tag", "有 permission")
-                } else {
                     finish()
                 }
             }
