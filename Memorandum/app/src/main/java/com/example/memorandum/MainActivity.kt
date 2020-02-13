@@ -6,6 +6,7 @@ import android.app.AlertDialog
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -15,6 +16,7 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.Button
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.SearchView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -47,7 +49,10 @@ class MainActivity : AppCompatActivity() {
     var lengthFlag = 0
     var charFlag = 0
 
+    var PERMISSION_REQUEST_CODE = 2
 
+
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -81,6 +86,12 @@ class MainActivity : AppCompatActivity() {
 
             Log.d("tag", "float跳过去啊")
         }
+
+        //日历相关
+        var c = CalendarReminderUtils(this)
+        checkCalendarPermission()
+        c.checkAndAddCalendarAccount()
+        c.insert()
     }
 
     @SuppressLint("RestrictedApi")
@@ -338,6 +349,29 @@ class MainActivity : AppCompatActivity() {
         mLocationClient.stop()
     }
 
+    /*用日历的时候申请权限*/
+    @RequiresApi(Build.VERSION_CODES.M)
+    private fun checkCalendarPermission() {
+        var readPermission = checkSelfPermission(android.Manifest.permission.READ_CALENDAR)
+        var writePermission = checkSelfPermission(android.Manifest.permission.WRITE_CALENDAR)
+        if (readPermission == PackageManager.PERMISSION_GRANTED
+            && writePermission == PackageManager.PERMISSION_GRANTED
+        ) {
+            Log.d("tag", "有 permission")
+
+        }  //表示有权限
+        else {
+            Log.d("tag", "require permission")
+            requestPermissions(
+                arrayOf(
+                    android.Manifest.permission.READ_CALENDAR,
+                    android.Manifest.permission.WRITE_CALENDAR
+                ), PERMISSION_REQUEST_CODE
+            )
+        }
+    }
+
+
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -355,16 +389,23 @@ class MainActivity : AppCompatActivity() {
                             finish()
 
                             return
-
                         }
-
                     }
                     requestLocation()
                 } else {
                     Toast.makeText(this, "发生未知错误", Toast.LENGTH_LONG).show()
                     finish()
                 }
-
+            }
+            2 -> {
+                if (grantResults.size == 2 && grantResults[0] == PackageManager.PERMISSION_GRANTED
+                    && grantResults[1] == PackageManager.PERMISSION_GRANTED
+                ) {
+                    //有权限
+                    Log.d("tag", "有 permission")
+                } else {
+                    finish()
+                }
             }
         }
     }
