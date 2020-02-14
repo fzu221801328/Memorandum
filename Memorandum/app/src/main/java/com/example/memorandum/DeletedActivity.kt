@@ -66,6 +66,7 @@ class DeletedActivity : AppCompatActivity() {
                    // Log.d("tag","requestCode = 2")
 
                     var id = data?.getIntExtra("_id",0)
+                    var title = data?.getStringExtra("title")
                     var words = data?.getStringExtra("words")
                     var time = data?.getStringExtra("time")
                     //Log.d("tag","id = "+ id)
@@ -73,6 +74,7 @@ class DeletedActivity : AppCompatActivity() {
                     var temp = Note(words.toString())
                     temp.id = id!!
                     temp.time = time!!
+                    temp.title = title!!
 
                     masterSqlite.recover(temp)
                     refreshRecyclerView()

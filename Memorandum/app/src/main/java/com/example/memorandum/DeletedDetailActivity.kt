@@ -41,9 +41,11 @@ class DeletedDetailActivity: AppCompatActivity() {
         //显示修改之前的这些
 
         var oldTime = intent.getStringExtra("time")
+        var oldTitle = intent.getStringExtra("title")
         var oldWords = intent.getStringExtra("words")
         var location = intent.getStringExtra("location")
 
+        deletedNoteTitle.setText(oldTitle)
         deletedNoteNote.setText(oldWords)
         deletedNoteTime.setText(oldTime)
         deleted_location.setText(location)
@@ -64,6 +66,7 @@ class DeletedDetailActivity: AppCompatActivity() {
         var mode =intent.getIntExtra("mode",-1)
         var id =intent.getIntExtra("_id",0)
         var oldTime = intent.getStringExtra("time")
+        var oldTitle = intent.getStringExtra("title")
         var oldWords = intent.getStringExtra("words")
 
         var intent2 = Intent()
@@ -77,6 +80,7 @@ class DeletedDetailActivity: AppCompatActivity() {
 
                             intent2.putExtra("mode",4)//4回收站删除
                             intent2.putExtra("time",oldTime)
+                            intent2.putExtra("title",oldTitle)
                             intent2.putExtra("words",oldWords)
                             intent2.putExtra("_id",id)
 
@@ -94,6 +98,7 @@ class DeletedDetailActivity: AppCompatActivity() {
 
                         intent2.putExtra("mode",5)//5回收站恢复
                         intent2.putExtra("time",oldTime)
+                        intent2.putExtra("title",oldTitle)
                         intent2.putExtra("words",oldWords)
                         intent2.putExtra("_id",id)
 

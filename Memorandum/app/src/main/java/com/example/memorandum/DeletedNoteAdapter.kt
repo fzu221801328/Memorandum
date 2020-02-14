@@ -46,11 +46,13 @@ class DeletedNoteAdapter(private val context: Context, private var mnoteList:Mut
     ,View.OnLongClickListener{
 
         lateinit var note:Note
+        var noteTitle:TextView
         var noteName: TextView
         var noteTime: TextView
         var noteSelected: CheckBox
 
         init {
+            this.noteTitle = view.findViewById(R.id.itemTitle)
             this.noteName = view.findViewById(R.id.itemText)
             this.noteTime = view.findViewById(R.id.itemTime)
             this.noteSelected = view.findViewById(R.id.item_checkBox)
@@ -63,6 +65,7 @@ class DeletedNoteAdapter(private val context: Context, private var mnoteList:Mut
         {
             //得到了我们点击的Note，有id，words，time等
             this.note = note
+            noteTitle.setText(note.title)
             noteName.setText(note.words)
             noteTime.setText(note.time)
 
@@ -82,11 +85,10 @@ class DeletedNoteAdapter(private val context: Context, private var mnoteList:Mut
             var intent = Intent(context,DeletedDetailActivity::class.java)
             //Toast.makeText(context,note.id.toString(),Toast.LENGTH_SHORT).show()
 
-            //这边跳去修改,传数据给下一个活动
+            //这边跳去detail,传数据给下一个活动
             intent.putExtra("_id",note.id)
-            Log.d("tag","note.id = "+ note.id)
+            intent.putExtra("title", note.title)
             intent.putExtra("words",note.words)
-            Log.d("tag","note.words = "+ note.words)
             intent.putExtra("time",note.time)
             intent.putExtra("location",note.location)
             intent.putExtra("mode",2)//2是修改
@@ -188,16 +190,16 @@ class DeletedNoteAdapter(private val context: Context, private var mnoteList:Mut
         //val note = mnoteList[position]
         holder.bind(mnoteList[position])
 
-        holder.noteSelected.setOnCheckedChangeListener(null);//清掉监听器
-        holder.noteSelected.setChecked(mSelectedPositions.get(position)!!);//设置选中状态
+        holder.noteSelected.setOnCheckedChangeListener(null)//清掉监听器
+        holder.noteSelected.setChecked(mSelectedPositions.get(position)!!)//设置选中状态
 
         holder.noteSelected.setOnClickListener {
 
             if (isItemChecked(position)) {
-                setItemChecked(position, false);
+                setItemChecked(position, false)
                 Toast.makeText(context,"不选"+mnoteList[position].words,Toast.LENGTH_SHORT).show()
             } else {
-                setItemChecked(position, true);
+                setItemChecked(position, true)
                 Toast.makeText(context,"选中"+mnoteList[position].words,Toast.LENGTH_SHORT).show()
             }
         }
@@ -211,7 +213,7 @@ class DeletedNoteAdapter(private val context: Context, private var mnoteList:Mut
         while (i < mnoteList.size) {
             if (isItemChecked(i)) {
                 mSelectedPositions.delete(i)//然后怎么把打勾去掉
-                selectList.add(mnoteList[i].id);
+                selectList.add(mnoteList[i].id)
             }
             i++
         }
@@ -253,7 +255,7 @@ class DeletedNoteAdapter(private val context: Context, private var mnoteList:Mut
         mSelectedPositions.clear()
         var i = 0
         while( i < mnoteList.size ) {
-            mSelectedPositions.put(i, false);// 默认所有的checkbox都是没选中
+            mSelectedPositions.put(i, false)// 默认所有的checkbox都是没选中
             i++
         }
         Log.d("tag","flag = "+ flag)

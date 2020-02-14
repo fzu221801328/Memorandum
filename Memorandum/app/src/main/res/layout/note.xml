@@ -69,6 +69,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/editTime"
         android:textSize="25dp"
+        android:hint="标题"
         />
 
     <EditText
@@ -77,6 +78,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/editTitle"
         android:textSize="20dp"
+        android:hint="内容"
         />
 
 
