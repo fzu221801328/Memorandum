@@ -22,12 +22,12 @@ class MyDatabaseHelper(
 
 //建立一个新的表
     private var CREATE_NOTE = "create table ${TABLE_NAME1} ("+
-            "_id integer primary key autoincrement,"+
+            "_id integer primary key autoincrement,"+"title text,"+
             "words text,"+"time text,"+"location text)"
 
     //回收站
     private  var CREATE_DELETED_NOTE = "create table ${TABLE_NAME2}("+
-            "_id integer primary key autoincrement,"+
+            "_id integer primary key autoincrement,"+"title text,"+
             "words text,"+"time text,"+"location text)"
 
     private var mContext=context

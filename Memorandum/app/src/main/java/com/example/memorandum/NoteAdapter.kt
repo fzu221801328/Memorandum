@@ -15,6 +15,7 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import org.w3c.dom.Text
 
 
 class NoteAdapter(private val context: Context, private var mnoteList:MutableList<Note>) :
@@ -38,10 +39,10 @@ class NoteAdapter(private val context: Context, private var mnoteList:MutableLis
     init {
         backList = mnoteList
 
-        ;//在哪里改的？
+        //在哪里改的？
         var i = 0
         while( i < mnoteList.size ) {
-            mSelectedPositions.put(i, false);// 默认所有的checkbox都是没选中
+            mSelectedPositions.put(i, false)// 默认所有的checkbox都是没选中
             i++
         }
     }
@@ -64,17 +65,20 @@ class NoteAdapter(private val context: Context, private var mnoteList:MutableLis
         , View.OnClickListener,View.OnLongClickListener {
 
         lateinit var note: Note
+        var noteTitle:TextView
         var noteName: TextView
         var noteTime: TextView
+
         var noteSelected: CheckBox
 
         init {
+            this.noteTitle = view.findViewById(R.id.itemTitle)
             this.noteName = view.findViewById(R.id.itemText)
             this.noteTime = view.findViewById(R.id.itemTime)
             this.noteSelected = view.findViewById(R.id.item_checkBox)
             view.setOnClickListener(this)
             view.setOnLongClickListener(this)
-            setIsRecyclable(false)//?
+            //setIsRecyclable(false)//?
 
         }
 
@@ -82,6 +86,7 @@ class NoteAdapter(private val context: Context, private var mnoteList:MutableLis
         fun bind(note: Note) {
             //得到了我们点击的Note，有id，words，time等
             this.note = note
+            noteTitle.setText(note.title)
             noteName.setText(note.words)
             noteTime.setText(note.time)
 
@@ -103,9 +108,8 @@ class NoteAdapter(private val context: Context, private var mnoteList:MutableLis
 
             //这边跳去修改,传数据给下一个活动
             intent.putExtra("_id", note.id)
-            Log.d("tag", "note.id = " + note.id)
+            intent.putExtra("title", note.title)
             intent.putExtra("words", note.words)
-            Log.d("tag", "note.words = " + note.words)
             intent.putExtra("time", note.time)
             intent.putExtra("location",note.location)
             intent.putExtra("mode", 2)//2是修改
@@ -138,7 +142,7 @@ class NoteAdapter(private val context: Context, private var mnoteList:MutableLis
                                 var i = 0
                                 while (i < mnoteList.size) {
                                         mSelectedPositions.
-                                            add(false);
+                                            add(false)
 
                                     i++
                                 }*/
@@ -193,16 +197,16 @@ class NoteAdapter(private val context: Context, private var mnoteList:MutableLis
         //val note = mnoteList[position]
         holder.bind(mnoteList[position])
 
-        holder.noteSelected.setOnCheckedChangeListener(null);//清掉监听器
-        holder.noteSelected.setChecked(mSelectedPositions.get(position)!!);//设置选中状态
+        holder.noteSelected.setOnCheckedChangeListener(null)//清掉监听器
+        holder.noteSelected.setChecked(mSelectedPositions.get(position)!!)//设置选中状态
 
         holder.noteSelected.setOnClickListener {
 
             if (isItemChecked(position)) {
-                setItemChecked(position, false);
+                setItemChecked(position, false)
                 Toast.makeText(context,"不选"+mnoteList[position].words,Toast.LENGTH_SHORT).show()
             } else {
-                setItemChecked(position, true);
+                setItemChecked(position, true)
                 Toast.makeText(context,"选中"+mnoteList[position].words,Toast.LENGTH_SHORT).show()
             }
         }
@@ -216,7 +220,7 @@ class NoteAdapter(private val context: Context, private var mnoteList:MutableLis
         while (i < mnoteList.size) {
             if (isItemChecked(i)) {
                 mSelectedPositions.delete(i)//然后怎么把打勾去掉
-                selectList.add(mnoteList[i].id);
+                selectList.add(mnoteList[i].id)
             }
             i++
         }
@@ -309,7 +313,7 @@ class NoteAdapter(private val context: Context, private var mnoteList:MutableLis
         mSelectedPositions.clear()
         var i = 0
         while( i < mnoteList.size ) {
-            mSelectedPositions.put(i, false);// 默认所有的checkbox都是没选中
+            mSelectedPositions.put(i, false)// 默认所有的checkbox都是没选中
             i++
         }
 
@@ -317,4 +321,3 @@ class NoteAdapter(private val context: Context, private var mnoteList:MutableLis
     }
 
 }
-

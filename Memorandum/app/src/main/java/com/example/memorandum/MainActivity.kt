@@ -113,10 +113,12 @@ class MainActivity : AppCompatActivity() {
                 Log.d("tag", "requestCode = 1")
                 if (resultCode == RESULT_OK) {
 
+                    var title = data?.getStringExtra("title")
                     var words = data?.getStringExtra("words")
 
                     //这一句要改成存入数据库啦
                     var temp = Note(words.toString())
+                    temp.title = title.toString()
                     temp.location = currentLocation
                     masterSqlite.addData(temp)
                 }
@@ -126,10 +128,12 @@ class MainActivity : AppCompatActivity() {
                     Log.d("tag", "requestCode = 2")
 
                     var id = data?.getIntExtra("_id", 0)
+                    var title = data?.getStringExtra("title")//忘了这个变成Memorandum
                     var words = data?.getStringExtra("words")
                     //Log.d("tag","id = "+ id)
                     //Log.d("tag","words = "+ words)
                     var temp = Note(words.toString())
+                    temp.title = title.toString()
                     temp.id = id!!
                     temp.location = currentLocation
 
@@ -139,12 +143,13 @@ class MainActivity : AppCompatActivity() {
             3 -> if (resultCode == RESULT_OK) {
                 Log.d("tag", "requestCode = 3")
                 var id = data?.getIntExtra("_id", 0)
-                var time = data?.getStringExtra("time")
-                var words = data?.getStringExtra("words")
+                //var time = data?.getStringExtra("time")
+                //var words = data?.getStringExtra("words")
                 var temp = Note("0")
                 temp.id = id!!
-                temp.time = time!!
-                temp.words = words!!
+                //删除只需要id
+                //temp.time = time!!
+                //temp.words = words!!
 
                 masterSqlite.deleteNote(temp)
             }

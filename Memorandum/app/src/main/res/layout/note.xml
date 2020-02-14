@@ -64,10 +64,18 @@
         />
 
     <EditText
-        android:id="@+id/editNote"
+        android:id="@+id/editTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/editTime"
+        android:textSize="25dp"
+        />
+
+    <EditText
+        android:id="@+id/editNote"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/editTitle"
         android:textSize="20dp"
         />
 

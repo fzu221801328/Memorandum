@@ -53,11 +53,22 @@ class NewActivity: AppCompatActivity() {
         //var id =intent.getIntExtra("id",0)
         //显示修改之前的这些
 
+        var mode =intent.getIntExtra("mode",-1)
+
         var oldTime = intent.getStringExtra("time")
+        var oldTitle = intent.getStringExtra("title")
         var oldWords = intent.getStringExtra("words")
         var oldLocation = intent.getStringExtra("location")
 
+        editTitle.setText(oldTitle)
         editNote.setText(oldWords)
+        if(mode != 1)//光标移到最后
+        {
+            if(oldTitle.isNotEmpty())
+                editTitle.setSelection(oldTitle.length)
+            if(oldWords.isNotEmpty())
+                editNote.setSelection(oldWords.length)
+        }
         editTime.setText(oldTime)
         edit_location.setText(oldLocation)
 
@@ -149,6 +160,7 @@ class NewActivity: AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+    /*保存笔记*/
     fun saveNote(){
         //要通过intent传过来的mode来选择，是新建还是修改什么的
         var mode =intent.getIntExtra("mode",-1)
@@ -156,8 +168,16 @@ class NewActivity: AppCompatActivity() {
         if(mode == 1)//新增笔记
         {
             var intent2 = Intent()
-            intent2.putExtra("words",editNote.text.toString())
-            intent2.putExtra("mode",1)
+            //如果新增笔记words或title为空，就不添加它了
+            if(editTitle.text.toString() == "" || editNote.text.toString() == "")
+                intent2.putExtra("mode",-1)
+            else
+            {
+                intent2.putExtra("title",editTitle.text.toString())
+                intent2.putExtra("words",editNote.text.toString())
+                intent2.putExtra("mode",1)
+            }
+
             setResult(RESULT_OK,intent2)//返回了这个intent
             finish()//不能在oncreate里写
         }
@@ -167,10 +187,20 @@ class NewActivity: AppCompatActivity() {
 
             var id =intent.getIntExtra("_id",0)
 
-            intent2.putExtra("_id",id)
-            intent2.putExtra("time",editTime.text.toString())
-            intent2.putExtra("words",editNote.text.toString())
-            intent2.putExtra("mode",2)
+            //如果点进去没修改title和words，就不更新时间
+            var oldTitle = intent.getStringExtra("title")
+            var oldWords = intent.getStringExtra("words")
+
+            if(editTitle.text.toString() == oldTitle && editNote.text.toString() == oldWords)
+                intent2.putExtra("mode",-1)
+            else
+            {
+                intent2.putExtra("_id",id)
+                intent2.putExtra("time",editTime.text.toString())
+                intent2.putExtra("title",editTitle.text.toString())
+                intent2.putExtra("words",editNote.text.toString())
+                intent2.putExtra("mode",2)
+            }
 
             setResult(RESULT_OK,intent2)//返回了这个intent
             finish()
@@ -178,6 +208,9 @@ class NewActivity: AppCompatActivity() {
 
     }
 
+
+/*************************************************************************************/
+/*********************往下是 提醒 和 日历************************************************/
 
     override fun onCreateDialog(id: Int): Dialog? {
         when (id) {

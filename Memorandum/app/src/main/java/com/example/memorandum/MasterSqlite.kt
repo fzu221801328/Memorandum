@@ -14,7 +14,7 @@ class MasterSqlite(var context: Context) {
         Log.d("tag","会走到MasterSqlite")
     }
 //更新表时版本要+++
-    var dbHelper = MyDatabaseHelper(context,"Database.db",null,11)
+    var dbHelper = MyDatabaseHelper(context,"Database.db",null,13)
 
     fun open()
     {
@@ -26,10 +26,13 @@ class MasterSqlite(var context: Context) {
         dbHelper.close()
     }
 
+    /*添加笔记*/
     fun addData(note: Note)
     {
         var db = dbHelper.readableDatabase
         var values = ContentValues()
+
+        values.put("title",note.title)
         values.put("words",note.words)
         values.put("time",DateUtil.nowDateTime)//为什么加上这句话直接就存不进去了//表没更新
         values.put("location",note.location)
@@ -46,6 +49,7 @@ class MasterSqlite(var context: Context) {
         var db = dbHelper.readableDatabase
         var values = ContentValues()
 
+        values.put("title",note.title)
         values.put("words",note.words)
         values.put("time",DateUtil.nowDateTime)
         values.put("location",note.location)
@@ -69,9 +73,10 @@ class MasterSqlite(var context: Context) {
 
         if(cursor.moveToFirst())
         {
-                note.words = cursor.getString(cursor.getColumnIndex("words"))
-                note.time = cursor.getString(cursor.getColumnIndex("time"))
-                note.location = cursor.getString(cursor.getColumnIndex("location"))
+            note.title = cursor.getString(cursor.getColumnIndex("title"))
+            note.words = cursor.getString(cursor.getColumnIndex("words"))
+            note.time = cursor.getString(cursor.getColumnIndex("time"))
+            note.location = cursor.getString(cursor.getColumnIndex("location"))
         }
         cursor.close()
 
@@ -94,6 +99,7 @@ class MasterSqlite(var context: Context) {
    //还要把这条加到回收站里面
 
        var values = ContentValues()
+        values.put("title",note2.title)
         values.put("words",note2.words)
         values.put("time",note2.time)//为什么加上这句话直接就存不进去了//表没更新
         values.put("location",note2.location)
@@ -120,6 +126,7 @@ class MasterSqlite(var context: Context) {
         //还要把这条加到回收站里面
 
         var values = ContentValues()
+        values.put("title",note2.title)
         values.put("words",note2.words)
         values.put("time",note2.time)//为什么加上这句话直接就存不进去了//表没更新
         values.put("location",note2.location)
@@ -149,14 +156,14 @@ class MasterSqlite(var context: Context) {
 
         //db.execSQL("insert into ${TABLE_NAME2} select  * from ${TABLE_NAME1}")
         //如果主键相同，就不行
-        db.execSQL("insert into ${TABLE_NAME2} (words,time,location)"+ " select words,time,location from ${TABLE_NAME1}")
+        db.execSQL("insert into ${TABLE_NAME2} (title,words,time,location)"+ " select title,words,time,location from ${TABLE_NAME1}")
     }
 
     fun copy2()
     {
         var db = dbHelper.writableDatabase
 
-        db.execSQL("insert into ${TABLE_NAME1} (words,time,location)"+ " select words,time,location from ${TABLE_NAME2}")
+        db.execSQL("insert into ${TABLE_NAME1} (title,words,time,location)"+ " select title,words,time,location from ${TABLE_NAME2}")
     }
 
 
@@ -175,12 +182,14 @@ class MasterSqlite(var context: Context) {
         if(cursor.moveToFirst())
         {
             do {
+                var title = cursor.getString(cursor.getColumnIndex("title"))
                 var words = cursor.getString(cursor.getColumnIndex("words"))
                 var time = cursor.getString(cursor.getColumnIndex("time"))
                 var id = cursor.getString(cursor.getColumnIndex("_id"))
                 var location = cursor.getString(cursor.getColumnIndex("location"))
                 //Log.d("tag","book author is"+ words)
                 var note1 = Note(words)
+                note1.title = title
                 note1.time =time
                 note1.id = id.toInt()
                 note1.location = location
@@ -192,4 +201,4 @@ class MasterSqlite(var context: Context) {
        // return cursor
     }
 
-    }
+}
