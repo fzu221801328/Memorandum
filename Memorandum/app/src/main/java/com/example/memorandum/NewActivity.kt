@@ -130,30 +130,13 @@ class NewActivity: AppCompatActivity() {
             }
             R.id.menu_alarm ->{
                 //日历相关
-                var c = CalendarReminderUtils(this)
                 checkCalendarPermission()
-                c.checkAndAddCalendarAccount()
 
 
                 dateDisplay.visibility = View.VISIBLE
                 timeDisplay.visibility = View.VISIBLE
-                addAlarmButton.visibility = View.VISIBLE
-                showDialog(TIME_DIALOG)
+
                 showDialog(DATE_DIALOG)
-
-                addAlarmButton.setOnClickListener {
-                    if (dateDisplay.text.toString() != "我是默认日期显示" &&
-                        timeDisplay.text.toString() != "我是默认时间显示")
-                    {
-                        c.insert(mYear,mMonth,mDay,mHour,mMinute)
-                    }
-                    else
-                    {
-                        Toast.makeText(this,"添加失败",Toast.LENGTH_LONG).show()
-                    }
-
-
-                }
 
             }
         }
@@ -212,6 +195,7 @@ class NewActivity: AppCompatActivity() {
 /*************************************************************************************/
 /*********************往下是 提醒 和 日历************************************************/
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreateDialog(id: Int): Dialog? {
         when (id) {
 
@@ -242,12 +226,23 @@ class NewActivity: AppCompatActivity() {
             mMonth = monthOfYear
             mDay = dayOfMonth
             displayDate()
+            showDialog(TIME_DIALOG)
         }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     private val mtimeListener = TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
         mHour = hourOfDay
         mMinute = minute
         displayTime()
+
+        var c = CalendarReminderUtils(this)
+        c.checkAndAddCalendarAccount()
+
+        var note = Note(editNote.text.toString())
+        note.title = editTitle.text.toString()
+        note.location = edit_location.text.toString()
+        c.insert(mYear,mMonth,mDay,mHour,mMinute,note)
+        alarmImage.visibility = View.VISIBLE
     }
 
     @RequiresApi(Build.VERSION_CODES.M)

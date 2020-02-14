@@ -18,34 +18,44 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/alarmImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_toLeftOf="@id/dateDisplay"
+            android:background="@drawable/ic_alarm_on_black_24dp"
+            android:visibility="gone"
+            />
+
     <TextView
         android:id="@+id/dateDisplay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="我是默认日期显示"
+        android:text="请选择日期"
+        android:textSize="20dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginLeft="5dp"
+        android:layout_toLeftOf="@id/timeDisplay"
         android:visibility="gone"
+        android:textColor="#F64646"
         />
 
     <TextView
         android:id="@+id/timeDisplay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="我是默认时间显示"
-        android:layout_below="@id/dateDisplay"
+        android:text="请选择时间"
+        android:textSize="20dp"
+        android:layout_marginTop="2dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
         android:visibility="gone"
+        android:textColor="#F64646"
         />
 
-    <Button
-        android:id="@+id/addAlarmButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="添加提醒"
-        android:textSize="20dp"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="100dp"
-        android:background="#BE90D2"
-        android:visibility="gone"
-        />
 
     </RelativeLayout>
 
@@ -60,6 +70,8 @@
         android:id="@+id/editTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="5dp"
         android:textSize="20dp"
         />
 

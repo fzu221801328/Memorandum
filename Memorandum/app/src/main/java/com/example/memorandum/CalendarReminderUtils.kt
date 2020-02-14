@@ -108,7 +108,7 @@ public class CalendarReminderUtils(private val context: Context) {
     }
 
     @SuppressLint("MissingPermission")
-    fun insert(year:Int,month:Int,date:Int,hour:Int,minute:Int) {
+    fun insert(year:Int,month:Int,date:Int,hour:Int,minute:Int,note:Note) {
         var calID: Long = 1
         var startMillis: Long = 0
         var endMillis: Long = 0
@@ -127,18 +127,18 @@ public class CalendarReminderUtils(private val context: Context) {
         var values = ContentValues()
         values.put(CalendarContract.Events.DTSTART, startMillis)
         values.put(CalendarContract.Events.DTEND, endMillis)
-        values.put(CalendarContract.Events.TITLE, "Jazzercise")
-        values.put(CalendarContract.Events.DESCRIPTION, "Group workout")
+        values.put(CalendarContract.Events.TITLE, note.title)
+        values.put(CalendarContract.Events.DESCRIPTION, note.words)
         values.put(CalendarContract.Events.CALENDAR_ID, calID)
         values.put(CalendarContract.Events.EVENT_TIMEZONE, timeZone)
-        values.put(CalendarContract.Events.EVENT_LOCATION, "福建")
+        values.put(CalendarContract.Events.EVENT_LOCATION, note.location)
         var resultUri = cr.insert(CalendarContract.Events.CONTENT_URI, values)
         var eventId = resultUri?.lastPathSegment
         //var eventId = ContentUris.parseId(resultUri)
 
         var reminderValues = ContentValues()
         reminderValues.put(CalendarContract.Reminders.EVENT_ID, eventId)
-        reminderValues.put(CalendarContract.Reminders.MINUTES, 5)
+        reminderValues.put(CalendarContract.Reminders.MINUTES, 0)
         reminderValues.put(
             CalendarContract.Reminders.METHOD,
             CalendarContract.Reminders.METHOD_ALERT
