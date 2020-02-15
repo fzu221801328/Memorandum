@@ -140,6 +140,8 @@ class MasterSqlite(var context: Context) {
         var db = dbHelper.writableDatabase
 
         db.delete("${TABLE_NAME1}",null, null)
+        //id归0一下
+        //db.execSQL("update sqlite_sequence set seq=0 where name='${TABLE_NAME1}'")
     }
 
     fun deleteAll2()
@@ -147,6 +149,7 @@ class MasterSqlite(var context: Context) {
         var db = dbHelper.writableDatabase
 
         db.delete("${TABLE_NAME2}",null, null)
+        //db.execSQL("update sqlite_sequence set seq=0 where name='${TABLE_NAME2}'")
     }
 
     fun copy()

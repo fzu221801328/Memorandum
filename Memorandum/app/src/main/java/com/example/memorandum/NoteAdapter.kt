@@ -120,7 +120,7 @@ class NoteAdapter(private val context: Context, private var mnoteList:MutableLis
 
         @SuppressLint("RestrictedApi")
         override fun onLongClick(view: View?): Boolean {
-            Toast.makeText(context, "长按了", Toast.LENGTH_SHORT).show()
+            //Toast.makeText(context, "长按了", Toast.LENGTH_SHORT).show()
 
             /*隐藏一些，显示一些*/
             var ac = context as Activity
@@ -204,10 +204,10 @@ class NoteAdapter(private val context: Context, private var mnoteList:MutableLis
 
             if (isItemChecked(position)) {
                 setItemChecked(position, false)
-                Toast.makeText(context,"不选"+mnoteList[position].words,Toast.LENGTH_SHORT).show()
+                //Toast.makeText(context,"不选"+mnoteList[position].words,Toast.LENGTH_SHORT).show()
             } else {
                 setItemChecked(position, true)
-                Toast.makeText(context,"选中"+mnoteList[position].words,Toast.LENGTH_SHORT).show()
+                //Toast.makeText(context,"选中"+mnoteList[position].words,Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -252,14 +252,14 @@ class NoteAdapter(private val context: Context, private var mnoteList:MutableLis
             var result = FilterResults()
             var list: MutableList<Note>?
 
-            Log.d("tag",charSequence.toString()+"在Myfilter里")
+           // Log.d("tag",charSequence.toString()+"在Myfilter里")
             if (TextUtils.isEmpty(charSequence)) {//当过滤的关键字为空的时候，我们则显示所有的数据
                 list = backList
             } else {//否则把符合条件的数据对象添加到集合中
                 list = ArrayList()
                 backList?.forEach { note ->
-                    Log.d("tag","进了多少次foreach")
-                    if (note.words.contains(charSequence!!)) {
+                  //  Log.d("tag","进了多少次foreach")
+                    if (note.words.contains(charSequence!!) || note.title.contains(charSequence)) {
                         list.add(note)
 
                     }
@@ -316,6 +316,7 @@ class NoteAdapter(private val context: Context, private var mnoteList:MutableLis
             mSelectedPositions.put(i, false)// 默认所有的checkbox都是没选中
             i++
         }
+        mnoteList.sortByDescending { it.translateTime(it.time) }
 
         notifyDataSetChanged()
     }

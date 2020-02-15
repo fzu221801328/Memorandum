@@ -116,6 +116,8 @@ class DeletedActivity : AppCompatActivity() {
     fun initNotes(){
 
         var noteList: MutableList<Note> = masterSqlite.findAllData(2)
+        //默认按时间排序
+        noteList.sortByDescending {  it.id  }
         this.noteList = noteList
 
     }

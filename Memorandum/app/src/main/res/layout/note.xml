@@ -15,6 +15,8 @@
         android:background="#FFFFFF"
         />
 
+
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -81,6 +83,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/editTime"
         android:textSize="25dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
         android:hint="标题"
         />
 
@@ -90,20 +94,25 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/editTitle"
         android:textSize="20dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
         android:hint="内容"
+        android:background="@null"
         />
-
-
 
     <TextView
         android:id="@+id/edit_location"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:padding="5dp"
         android:textSize="20dp"
         />
 
 
 </RelativeLayout>
+
+
+
 
 </LinearLayout>

@@ -98,7 +98,7 @@ class DeletedNoteAdapter(private val context: Context, private var mnoteList:Mut
         }
 
         override fun onLongClick(v: View?): Boolean {
-            Toast.makeText(context, "长按了", Toast.LENGTH_SHORT).show()
+            //Toast.makeText(context, "长按了", Toast.LENGTH_SHORT).show()
 
             /*隐藏一些，显示一些*/
             var ac = context as Activity
@@ -197,10 +197,10 @@ class DeletedNoteAdapter(private val context: Context, private var mnoteList:Mut
 
             if (isItemChecked(position)) {
                 setItemChecked(position, false)
-                Toast.makeText(context,"不选"+mnoteList[position].words,Toast.LENGTH_SHORT).show()
+                //Toast.makeText(context,"不选"+mnoteList[position].words,Toast.LENGTH_SHORT).show()
             } else {
                 setItemChecked(position, true)
-                Toast.makeText(context,"选中"+mnoteList[position].words,Toast.LENGTH_SHORT).show()
+                //Toast.makeText(context,"选中"+mnoteList[position].words,Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -250,7 +250,8 @@ class DeletedNoteAdapter(private val context: Context, private var mnoteList:Mut
         if(mnoteList.size > 0) mnoteList.clear()
         mnoteList.addAll(masterSqlite.findAllData(2))
         masterSqlite.close()
-
+        //默认按id排序
+        mnoteList.sortByDescending {  it.id  }
         //不保留打勾
         mSelectedPositions.clear()
         var i = 0

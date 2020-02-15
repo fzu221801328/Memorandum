@@ -73,7 +73,7 @@ class MainActivity : AppCompatActivity() {
 
 
         floatAddBtn.setOnClickListener {
-            Toast.makeText(this, "hahah", Toast.LENGTH_SHORT).show()
+           // Toast.makeText(this, "hahah", Toast.LENGTH_SHORT).show()
             var intent = Intent()
             intent.setClass(this, NewActivity::class.java)
 
@@ -187,6 +187,8 @@ class MainActivity : AppCompatActivity() {
         if (noteList.size > 0) noteList.clear()
         noteList.addAll(masterSqlite.findAllData())
         masterSqlite.close()
+        //默认按时间排序
+        noteList.sortByDescending {  it.translateTime(it.time)  }
         recycle.adapter?.notifyDataSetChanged()
     }
 
@@ -240,6 +242,8 @@ class MainActivity : AppCompatActivity() {
     fun initNotes() {
 
         var noteList: MutableList<Note> = masterSqlite.findAllData()
+        //默认按时间排序
+        noteList.sortByDescending {  it.translateTime(it.time)  }
         this.noteList = noteList
 
 
