@@ -216,8 +216,8 @@ class NewActivity: AppCompatActivity() {
         dateDisplay!!.text = StringBuffer().append(mYear).append("-").append(mMonth + 1).append("-").append(mDay).append(" ")
     }
 
-    fun displayTime(){
-        timeDisplay!!.text = StringBuffer().append(mHour).append(":").append(mMinute).append(" ")
+    fun displayTime(){//分钟设置为两位数
+        timeDisplay!!.text = StringBuffer().append(mHour).append(":").append(String.format("%02d",mMinute)).append(" ")
     }
 
     private val mdateListener =

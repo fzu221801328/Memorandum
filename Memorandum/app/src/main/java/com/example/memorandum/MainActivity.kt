@@ -396,11 +396,11 @@ class MainActivity : AppCompatActivity() {
 
                     currentPosition.append("纬度：").append(location?.latitude).append("\n")
                     currentPosition.append("经度：").append(location?.longitude).append("\n")
-                    currentPosition.append("国家:").append(location?.country).append("\n")
+                    currentPosition.append("国家：").append(location?.country).append("\n")
                     currentPosition.append("省：").append(location?.province).append("\n")
                     currentPosition.append("市：").append(location?.city).append("\n")
-                    currentPosition.append("区:").append(location?.district).append("\n")
-                    currentPosition.append("街道:").append(location?.street).append("\n")
+                    currentPosition.append("区：").append(location?.district).append("\n")
+                    currentPosition.append("街道：").append(location?.street).append("\n")
                     /*currentPosition.append("定位方式：")
                     if (location?.locType == BDLocation.TypeGpsLocation) {
                         currentPosition.append("GPS")
