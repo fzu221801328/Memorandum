@@ -224,12 +224,12 @@ class MainActivity : AppCompatActivity() {
             }
             5 -> {
                 noteList.sortBy {
-                    it.words
+                    it.title
                 }
             }
             6 -> {
                 noteList.sortByDescending {
-                    it.words
+                    it.title
                 }
             }
         }
